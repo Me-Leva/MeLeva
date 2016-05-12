@@ -1,0 +1,81 @@
+<ion-view view-title="Pedir Carona">
+  <ion-header-bar class="bar header bar-calm" style="font-style: italic;">
+    <div align="left" style="padding: 0px 0px 10px 5px"><a ui-sref="app.principal"> <img class="small" src="img/meleva_fundo_transparente.png" width="35" height="35"></a></div>
+    <div>
+      <h1 class="title" style="font-size: 20px">
+        <center>
+          <i>Pedir Carona</i>
+        </center>
+      </h1>
+    </div>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <ion-list>
+      <ion-radio ng-model="carona.opcao" ng-value="'O'" ng-click="mostrarOpcao()">Estou indo pra UVV</ion-radio>
+      <ion-radio ng-model="carona.opcao" ng-value="'D'" ng-click="mostrarOpcao()">Estou saindo da UVV</ion-radio>
+    </ion-list>
+    <br>
+
+    <div>
+      <center>
+        <span class="error" ng-show="carona.erro">{{carona.erroMsg}}</span>
+      </center>
+    </div>
+    <div class="list">
+      <label class="item item-input">
+		  
+		  <input ion-autocomplete type="text" readonly="readonly" class="ion-autocomplete" autocomplete="off"
+                       item-value-key="id"
+                       item-view-value-key="nome"
+                       items-method="getBairros(query)"
+                       items-method-value-key="items"
+				 	   cancel-label="Voltar"
+                       placeholder="Estou indo para..."
+                       items-clicked-method="itemsClicked(callback)"
+                       items-removed-method="itemsRemoved(callback)"
+				 		max-selected-items="1"
+				 		select-items-label="Selecione o bairro"
+				 		selected-items-label="Bairro selecionado"
+				 		ng-show="carona.mostrarDestino" ng-model="carona.destino" ng-required="true"/>
+		  
+		  <input ion-autocomplete type="text" readonly="readonly" class="ion-autocomplete" autocomplete="off"
+                       item-value-key="id"
+                       item-view-value-key="nome"
+                       items-method="getBairros(query)"
+                       items-method-value-key="items"
+				 	   cancel-label="Voltar"
+                       placeholder="Estou saindo de..."
+                       items-clicked-method="itemsClicked(callback)"
+                       items-removed-method="itemsRemoved(callback)"
+				 		max-selected-items="1"
+				 		select-items-label="Selecione o bairro"
+				 		selected-items-label="Bairro selecionado"
+				 		ng-show="carona.mostrarOrigem" ng-model="carona.origem" ng-required="true"/>
+      </label>
+    </div>
+
+    <div>
+      <span>Quantidade de Pessoas:</span>
+
+      <button class="button button-small button-clear button-dark" ng-click="diminuiPessoas()">
+        <i class="icon ion-android-remove-circle"></i>
+      </button>
+
+      <label>
+        <span>{{carona.numPessoas}}</span>
+      </label>
+
+      <button class="button button-small button-clear button-dark" ng-click="aumentaPessoas()">
+        <i class="icon ion-android-add-circle"></i>
+      </button>
+    </div>
+    <div>
+      <div id="tempo" ng-show="carona.botaoCancelarCarona">
+        <button class="button button-full button-assertive" ng-click="cancelarCarona()">Cancelar Pedido</button>
+      </div>
+      <div ng-show="carona.botaoPedirCarona">
+        <button class="button button-full button-positive" ng-click="pedirCarona()">Pedir Carona</button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

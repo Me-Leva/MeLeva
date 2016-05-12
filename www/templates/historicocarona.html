@@ -1,0 +1,36 @@
+<ion-view view-title="Histórico de Caronas">
+    <ion-header-bar class="bar header bar-calm" style="font-style: italic;">
+        <div align="left" style="padding: 0px 0px 10px 5px"><a ui-sref="app.principal"> <img class="small" src="img/meleva_fundo_transparente.png" width="35" height="35"></a></div>
+        <div>
+            <h1 class="title" style="font-size: 20px">
+        <center>
+          <i>Histórico de Caronas</i>
+        </center>
+      </h1>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <ion-list>
+            <ion-item ng-repeat="item in historico">
+                <div class="item item-body" ng-click="item.mostrarDetalhe = !item.mostrarDetalhe">
+                   <span><b>Motorista:</b></span> {{item.motorista.nome}} / {{item.motorista.telefone}} </br> 
+                    <span><b>Dia:</b></span> {{item.data}} <span><b>às</b></span> {{item.hora}}
+                </div>
+                <div ng-show="item.mostrarDetalhe" ng-click="item.mostrarDetalhe = !item.mostrarDetalhe">
+                    <div class="item item-body" style="background-color: beige;">
+                        <span><b>Origem:</b></span> {{item.origem.bairro}} - {{item.origem.cidade}}
+                        <br>
+                        <span><b>Destino:</b></span> {{item.destino.bairro}} - {{item.destino.cidade}}
+                        <p>
+                            <span>Solicitante(s):</span>
+                            <div class="item item-body">
+                                {{item.solicitante.nome}} / {{item.solicitante.telefone}}
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+
+</ion-view>

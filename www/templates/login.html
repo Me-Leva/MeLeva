@@ -1,0 +1,31 @@
+<ion-view view-title="Login">
+    <ion-content>
+      <ion-header-bar class="bar header bar-calm" style="font-style: italic;" align-title="left">
+        <h1 class="title" id="headertitle">MeLeva!</h1>
+            <button class="button button-positive" ui-sref="app.novocadastro">Cadastre-se</button>
+      </ion-header-bar>
+        <div>
+            <center>
+                <img class="full-image" src="img/blank.png">
+                <img class="full-image" src="img/meleva.png">
+            </center>
+        </div>
+        <div>
+         <div><center><span class="error" ng-show="loginData.erro">{{loginData.erroMsg}}</span></center> </div>
+
+        <form name="login" ng-submit="doLogin()">
+                <div class="list">
+                    <label class="item item-input" style="background-color: WhiteSmoke;">
+                    <input type="text" placeholder="Matrícula" ng-model="loginData.matricula" ng-required="true">
+                    </label>
+                    <label class="item item-input" style="background-color: WhiteSmoke;">
+                    <input type="password" placeholder="Senha" ng-model="loginData.senha" ng-required="true" ng-minlength="8">
+                    </label>
+                    <label class="item">
+                    <button name="entrar" class="button button-block button-positive" type="submit" ng-disabled="login.$invalid">ENTRAR</button>
+                    </label>
+                </div>
+        </form>
+        </div>
+    </ion-content>
+</ion-view>

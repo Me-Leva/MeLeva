@@ -1,0 +1,36 @@
+/* Empty. Add your own CSS if you like */
+input:focus{
+    border-color: red;
+    border-width: 3px;
+}
+
+.divlogin{
+    background : cornflowerblue;  
+    align-content: center;  
+}
+
+.logo{
+    width: 400px;
+    height: 400px;
+}
+
+#headertitle{
+    font-size: 24px;
+    font-style: italic;
+}
+
+.error{
+    color: red;
+    font-weight: bold;
+}
+
+.divlistaDireita{
+    float: right;    
+}
+.divlista{
+    display: inline;
+    max-width: 75%;
+}
+.item{
+    font-size: 14px;
+}

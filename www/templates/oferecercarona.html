@@ -1,0 +1,67 @@
+<ion-view view-title="Oferecer Carona">
+    <!--<ion-header-bar class="bar header bar-calm" style="font-style: italic;">
+    <button class="button button-positive" ui-sref='app.menu'>Voltar</button>
+  </ion-header-bar>-->
+    <ion-header-bar class="bar header bar-calm" style="font-style: italic;">
+        <div align="left" style="padding: 0px 0px 10px 5px"><a ui-sref="app.principal"> <img class="small" src="img/meleva_fundo_transparente.png" width="35" height="35"></a></div>
+        <div>
+            <h1 class="title" style="font-size: 20px">
+        <center>
+          <i>Oferecer Carona</i>
+        </center>
+      </h1>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+
+        <ion-side-menus style="height:900px;">
+            <ion-side-menu side="left">
+                <ion-header-bar class="bar-positive">
+                    <div class="buttons">
+                    </div>
+                    <div class="title">
+                        Filtro de Bairro para Pesquisa
+                    </div>
+                </ion-header-bar>
+                <ion-content>
+                    <ion-list>
+                        <ion-item ng-repeat="bairro in bairros">
+                            <ion-checkbox ng-model="bairro.check" ng-change="selectBairro(bairro.nome, bairro.check);">{{bairro.nome}}</ion-checkbox>
+                        </ion-item>
+                    </ion-list>
+                </ion-content>
+            </ion-side-menu>
+
+            <ion-side-menu-content>
+                <ion-header-bar class="bar-positive">
+                    <div class="buttons">
+                        <button class="button iocn ion-ios-settings-strong button-clear" ng-click="toggleLeft()"> Filtrar </button>
+                    </div>
+                    <div class="title">
+
+                    </div>
+                    <div class="buttons">
+                        <button class="button ion-search" ng-click="listarPedidosCarona()"> Pesquisar </button>
+                    </div>
+                </ion-header-bar>
+                <ion-content>
+                    <div>
+                        <ion-list>
+                            <ion-item ng-repeat="pedido in pedidos">  
+                                <div class="divlista">
+                                    <i class="icon ion-man"></i> {{pedido.vagas}} &nbsp&nbsp {{pedido.solicitante.nome}} </br> {{pedido.origem.bairro}} <i class="icon ion-arrow-right-c"></i> {{pedido.destino.bairro}}
+                                </div>
+                                <div class="divlistaDireita">
+                                    <button class="button ion-model-s button-small button-balanced" ng-click="oferecerCarona(pedido)"> Oferecer </button>
+                                </div>
+                            </ion-item>
+                        </ion-list>
+                    </div>
+                </ion-content>
+            </ion-side-menu-content>
+
+        </ion-side-menus>
+
+    </ion-content>
+
+</ion-view>
