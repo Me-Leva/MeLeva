@@ -17,7 +17,7 @@ angular.module('starter.controllers', ['firebase'])
     .service('AuthService', function ($q, $http, USER_ROLES) {
         var LOCAL_TOKEN_KEY = 'yourTokenKey';
         /* nome do usuário*/
-        var usuario = { 'matricula': '', 'nome': '', 'telefone': '' };  
+        var usuario = {};
         /* booleano que indica se o usuário está autenticado ou não */
         var isAuthenticated = false;
         var role = '';
@@ -37,7 +37,7 @@ angular.module('starter.controllers', ['firebase'])
             useCredentials(token);
         }
 
-        function useCredentials(token) {         
+        function useCredentials(token) {
             usuario = {
                 'matricula': token.split('.')[0],
                 'nome': token.split('.')[1],
@@ -59,18 +59,21 @@ angular.module('starter.controllers', ['firebase'])
 
         // reseta as credenciais do usuário
         function destroyUserCredentials() {
-            authToken = undefined;           
-            usuario = { 'matricula': '', 'nome': '', 'telefone': '' };
+            authToken = undefined;
+            usuario = {};
             isAuthenticated = false;
             //    $http.defaults.headers.common['X-Auth-Token'] = undefined;
             window.localStorage.removeItem(LOCAL_TOKEN_KEY);
         }
 
         // realiza o login do usuário com as credenciais
-        var login = function (nome, matricula, telefone) {
+        var login = function (usuario) {
             return $q(function (resolve, reject) {
-                if (nome != 'admin') {
-                    storeUserCredentials(matricula + '.' + nome + '.' + telefone + '.yourServerToken');
+                if (usuario.nome != 'admin') {
+                    storeUserCredentials(usuario.matricula + '.' +
+                        usuario.nome + '.' +
+                        usuario.telefone +
+                        '.yourServerToken');
                     resolve('Login success.');
                 } else {
                     reject('Login failed.');
@@ -98,7 +101,7 @@ angular.module('starter.controllers', ['firebase'])
             login: login,
             logout: logout,
             //    isAuthorized: isAuthorized,
-            isAuthenticated: function () { return isAuthenticated; },          
+            isAuthenticated: function () { return isAuthenticated; },
             matricula: function () { return usuario.matricula; },
             usuarioLogado: function () { return usuario; },
             role: function () { return role; }
@@ -180,14 +183,14 @@ angular.module('starter.controllers', ['firebase'])
                         $scope.loginData.senha = '';
 
                         // salva no rootScope o objeto do usuario
-                       // $rootScope.usuarioLogado = resp.data;
+                        // $rootScope.usuarioLogado = resp.data;
 
                         // $state.go('app.principal');
-                        
+
                         //efetua o login salvando os dados do usuário no storageLocal
-                        AuthService.login(resp.data.nome, resp.data.matricula, resp.data.telefone).then(function (authenticated) {
+                        AuthService.login(resp.data).then(function (authenticated) {
                             $state.go('app.principal', {}, { reload: true });
-                         //   $scope.setCurrentUsername(resp.data.nome, resp.data.matricula)
+                            //   $scope.setCurrentUsername(resp.data.nome, resp.data.matricula)
                         }, function (err) {
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Falha no Login',
@@ -226,8 +229,15 @@ angular.module('starter.controllers', ['firebase'])
 
 
     // controller da tela principal
-    .controller('principalCtrl', function ($scope, $state ,AuthService) {
-        
+    .controller('principalCtrl', function ($scope, $state, AuthService) {
+
+        // função que inicia o controlller
+        $scope.ini = function () {
+            $scope.usuarioLogado = AuthService.usuarioLogado();
+        }
+
+        $scope.ini();
+
         //efetua o logout
         $scope.doLogout = function () {
             AuthService.logout();
@@ -243,7 +253,7 @@ angular.module('starter.controllers', ['firebase'])
         // url do banco de dados
         var FIREBASE_URL = "https://amber-torch-3328.firebaseio.com/";
         var pedidosCarona = new Firebase(FIREBASE_URL + "caronas");
-        
+
         // busca os dados o usuário logado
         var usuarioLogado = AuthService.usuarioLogado();
 
@@ -706,7 +716,7 @@ angular.module('starter.controllers', ['firebase'])
 
         // url do banco de dados
         var FIREBASE_URL = "https://amber-torch-3328.firebaseio.com/";
-        
+
         //busca os dados do usuário logado
         var usuarioLogado = AuthService.usuarioLogado();
 
