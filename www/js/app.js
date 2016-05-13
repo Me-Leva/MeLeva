@@ -71,7 +71,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'firebase', 'ion-auto
   })
 
   /* função para validar as mudanças de rota*/
-  .run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
+  .run(function ($rootScope, $state, $ionicPlatform, AuthService, AUTH_EVENTS) {
     $rootScope.$on('$stateChangeStart', function (event, next, nextParams, fromState) {
 
       /* if ('data' in next && 'authorizedRoles' in next.data) {
@@ -89,6 +89,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'firebase', 'ion-auto
           event.preventDefault();
           $state.go('app.login');
         }
+      }
+
+      if (AuthService.isAuthenticated() && next.name == 'app.login' && fromState.name == 'app.principal') {
+        $ionicPlatform.exitApp();
       }
     });
   });

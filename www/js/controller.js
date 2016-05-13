@@ -26,26 +26,32 @@ angular.module('starter.controllers', ['firebase'])
         // carrega as credenciais do usuário
         function loadUserCredentials() {
             var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
+
             if (token) {
-                useCredentials(token);
+                var tokenAntigo = token.split('.')[3];
+                
+                if (tokenAntigo === 'yourServerToken') {
+                    destroyUserCredentials();
+                } else {
+                    useCredentials(token);
+                }
             }
+
         }
 
         // salva as credenciais do usuário
-        function storeUserCredentials(token) {
+        function storeUserCredentials(usuarioLog) {
+            var token = JSON.stringify(usuarioLog);
+
             window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
             useCredentials(token);
         }
 
         function useCredentials(token) {
-            usuario = {
-                'matricula': token.split('.')[0],
-                'nome': token.split('.')[1],
-                'telefone': token.split('.')[2]
-            };
+            usuario = JSON.parse(token);
 
             isAuthenticated = true;
-            authToken = token;
+            authToken = usuario.token;
 
             if (usuario.nome == 'admin') {
                 role = USER_ROLES.admin
@@ -70,10 +76,9 @@ angular.module('starter.controllers', ['firebase'])
         var login = function (usuario) {
             return $q(function (resolve, reject) {
                 if (usuario.nome != 'admin') {
-                    storeUserCredentials(usuario.matricula + '.' +
-                        usuario.nome + '.' +
-                        usuario.telefone +
-                        '.yourServerToken');
+                    usuario.token = 'yourServerToken';
+
+                    storeUserCredentials(usuario);
                     resolve('Login success.');
                 } else {
                     reject('Login failed.');
@@ -236,13 +241,13 @@ angular.module('starter.controllers', ['firebase'])
             $scope.usuarioLogado = AuthService.usuarioLogado();
         }
 
-        $scope.ini();
-
         //efetua o logout
         $scope.doLogout = function () {
             AuthService.logout();
             $state.go('app.login');
         };
+
+        $scope.ini();
 
     })
 
