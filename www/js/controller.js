@@ -29,7 +29,7 @@ angular.module('starter.controllers', ['firebase'])
 
             if (token) {
                 var tokenAntigo = token.split('.')[3];
-                
+
                 if (tokenAntigo === 'yourServerToken') {
                     destroyUserCredentials();
                 } else {
@@ -262,16 +262,39 @@ angular.module('starter.controllers', ['firebase'])
         // busca os dados o usuário logado
         var usuarioLogado = AuthService.usuarioLogado();
 
-        $scope.carona = {};
+        //zera os segundos do cronometro como valor inicial
+        var cronometroSegundos = 0, cronometroMinutos = 0, cronometroHora = 0;
+        var cronometroInterval = 0;
 
-        // define os valores iniciais dos campos da tela
-        $scope.carona.opcao = 'O';
-        $scope.carona.numPessoas = 1;
-        $scope.carona.mostrarOrigem = true;
-        $scope.carona.origem = '';
-        $scope.carona.destino = '';
-        $scope.carona.botaoPedirCarona = true;
+        $scope.init = function () {
+            $scope.carona = {};
 
+            // define os valores iniciais dos campos da tela
+            $scope.carona.opcao = 'O';
+            $scope.carona.numPessoas = 1;
+            $scope.carona.mostrarOrigem = true;
+            $scope.carona.origem = '';
+            $scope.carona.destino = '';
+            $scope.carona.botaoPedirCarona = true;
+
+            //limpa o cronometro da tela
+            $scope.cronometroTela = '00:00:00';
+            $scope.mostraCronometro = false;
+        };
+
+        //função para resetar o cronometro
+        function limpaCronometro() {
+            //reseta o intervalo do cronometro
+            clearInterval(cronometroInterval);
+            
+            //reseta as variaveis
+            cronometroSegundos = 0;
+            cronometroMinutos = 0;
+            cronometroHora = 0;
+            $scope.cronometroTela = '00:00:00';
+            $scope.mostraCronometro = false;
+
+        };
         // habilita o campo origem/destino de acordo com a opção selecionada
         $scope.mostrarOpcao = function () {
             if ($scope.carona.opcao == 'O') {
@@ -308,6 +331,9 @@ angular.module('starter.controllers', ['firebase'])
                 // volta a exibir o botão pedir carona
                 $scope.carona.botaoPedirCarona = true;
                 $scope.carona.botaoCancelarCarona = false;
+
+                //reseta o cronometro                
+                limpaCronometro();
 
                 // requisição que deleta a carona do banco de dados
                 $http({
@@ -346,6 +372,41 @@ angular.module('starter.controllers', ['firebase'])
                 $scope.carona.erroMsg = 'O campo origem/destino é obrigatório.';
             }
             else {
+                //reseta o valor da variavel de intervalo e mostra o cronometro                           
+                //por segurança reseto o cronometro para iniciar novamente.
+                limpaCronometro();
+                $scope.mostraCronometro = true;
+
+                //inicia o cronometro e chama a função a cada 1 segundo
+                cronometroInterval = setInterval(function () {
+                    //faz a contagem do cronometro
+                    var hr = '', min = '', segs = '';
+
+                    //adiciona os segundos
+                    cronometroSegundos++;
+
+                    // faz a contagem de minutos, adiciona um minuto a cada 60 segundos e zera os segundos
+                    if (cronometroSegundos == 60) {
+                        cronometroMinutos++;
+                        cronometroSegundos = 0;
+                    }
+
+                    // faz a contagem de horas, adiciona um hora a cada 60 minutos e zera os minutos
+                    if (cronometroMinutos == 60) {
+                        cronometroHora++;
+                        cronometroMinutos = 0;
+                    }
+                    //faz a formatação do tempo de como irá aparecer na tela
+                    if (cronometroHora < 10) { hr = "0" + cronometroHora } else { hr = cronometroHora };
+                    if (cronometroMinutos < 10) { min = "0" + cronometroMinutos } else { min = cronometroMinutos };
+                    if (cronometroSegundos < 10) { segs = "0" + cronometroSegundos } else { segs = cronometroSegundos };
+
+                    //preeche a variavel de escopo com o valor do cronometro
+                    $scope.cronometroTela = hr + ":" + min + ":" + segs;
+                    
+                    //atualiza o escopo
+                    $scope.$apply();
+                }, 1000);
 
                 // define que não há erros na tela de carona
                 $scope.carona.erro = false;
@@ -474,6 +535,9 @@ angular.module('starter.controllers', ['firebase'])
                                 $scope.carona.botaoPedirCarona = true;
                                 $scope.carona.botaoCancelarCarona = false;
 
+                                //reseta o cronometro                                
+                                limpaCronometro();                                
+
                                 // requisição que obtem os dados do motorista
                                 $http({
                                     method: 'GET',
@@ -563,7 +627,7 @@ angular.module('starter.controllers', ['firebase'])
                             default:
 
                                 // se o contador de requisições for maior que o limite máximo...
-                                if (caronaIntervalCounter > 4) {
+                                if (caronaIntervalCounter > 8) {
 
                                     // interrompe o loop de requisições
                                     clearInterval(caronaInterval);
@@ -580,6 +644,9 @@ angular.module('starter.controllers', ['firebase'])
                                         $scope.carona.botaoPedirCarona = true;
                                         $scope.carona.botaoCancelarCarona = false;
 
+                                        //reseta o cronometro                                        
+                                        limpaCronometro();                                        
+
                                         // informa o solicitante que o pedido de carona não foi atendido
                                         var alertPopup = $ionicPopup.alert({
                                             title: 'Tempo Esgotado',
@@ -592,6 +659,9 @@ angular.module('starter.controllers', ['firebase'])
                                         // volta a exibir o botão pedir carona
                                         $scope.carona.botaoPedirCarona = true;
                                         $scope.carona.botaoCancelarCarona = false;
+
+                                        //reseta o cronometro
+                                        limpaCronometro();                                        
 
                                         var alertPopup = $ionicPopup.alert({
                                             title: 'Erro',
@@ -615,6 +685,9 @@ angular.module('starter.controllers', ['firebase'])
                         // volta a exibir o botão pedir carona
                         $scope.carona.botaoPedirCarona = true;
                         $scope.carona.botaoCancelarCarona = false;
+
+                        //reseta o cronometro                                          
+                        limpaCronometro();                      
 
                         var alertPopup = $ionicPopup.alert({
                             title: 'Erro',
@@ -684,6 +757,7 @@ angular.module('starter.controllers', ['firebase'])
             $scope.removedValueModel = callback;
         };
 
+        $scope.init();
 
     })
 
