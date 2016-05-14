@@ -1,0 +1,10 @@
+Para gerar a chave de assinatura é necessário executar os comandos abaixo depois que a máquina já esteja toda configurada.
+
+gerar o certificado:
+keytool -genkey -v -keystore melevachave.keystore -alias meleva -keyalg RSA -keysize 2048 -validity 10000
+
+Assinar a APK com o certificado
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore melevachave.keystore platforms/android/build/outputs/apk/android-release-unsigned.apk meleva
+
+alinhar a APK
+zipalign -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk MeLeva-1_0.apk

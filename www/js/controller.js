@@ -263,7 +263,7 @@ angular.module('starter.controllers', ['firebase'])
         var usuarioLogado = AuthService.usuarioLogado();
 
         //zera os segundos do cronometro como valor inicial
-        var cronometroSegundos = 0, cronometroMinutos = 0, cronometroHora = 0;
+        var cronometroSegundos, cronometroMinutos;
         var cronometroInterval = 0;
 
         $scope.init = function () {
@@ -278,20 +278,18 @@ angular.module('starter.controllers', ['firebase'])
             $scope.carona.botaoPedirCarona = true;
 
             //limpa o cronometro da tela
-            $scope.cronometroTela = '00:00:00';
-            $scope.mostraCronometro = false;
+            limpaCronometro();
         };
 
         //função para resetar o cronometro
         function limpaCronometro() {
             //reseta o intervalo do cronometro
             clearInterval(cronometroInterval);
-            
+
             //reseta as variaveis
-            cronometroSegundos = 0;
+            cronometroSegundos = 10;
             cronometroMinutos = 0;
-            cronometroHora = 0;
-            $scope.cronometroTela = '00:00:00';
+            $scope.cronometroTela = cronometroMinutos + '0:' + cronometroSegundos;
             $scope.mostraCronometro = false;
 
         };
@@ -383,27 +381,21 @@ angular.module('starter.controllers', ['firebase'])
                     var hr = '', min = '', segs = '';
 
                     //adiciona os segundos
-                    cronometroSegundos++;
+                    cronometroSegundos--;
 
                     // faz a contagem de minutos, adiciona um minuto a cada 60 segundos e zera os segundos
-                    if (cronometroSegundos == 60) {
-                        cronometroMinutos++;
-                        cronometroSegundos = 0;
+                    if ((cronometroSegundos == 0) && (cronometroMinutos > 0)) {
+                        cronometroMinutos--;
+                        cronometroSegundos = cronometroSegundos + 59;
                     }
 
-                    // faz a contagem de horas, adiciona um hora a cada 60 minutos e zera os minutos
-                    if (cronometroMinutos == 60) {
-                        cronometroHora++;
-                        cronometroMinutos = 0;
-                    }
-                    //faz a formatação do tempo de como irá aparecer na tela
-                    if (cronometroHora < 10) { hr = "0" + cronometroHora } else { hr = cronometroHora };
+                    //faz a formatação do tempo de como irá aparecer na tela            
                     if (cronometroMinutos < 10) { min = "0" + cronometroMinutos } else { min = cronometroMinutos };
                     if (cronometroSegundos < 10) { segs = "0" + cronometroSegundos } else { segs = cronometroSegundos };
 
                     //preeche a variavel de escopo com o valor do cronometro
-                    $scope.cronometroTela = hr + ":" + min + ":" + segs;
-                    
+                    $scope.cronometroTela = min + ":" + segs;
+
                     //atualiza o escopo
                     $scope.$apply();
                 }, 1000);
@@ -536,7 +528,7 @@ angular.module('starter.controllers', ['firebase'])
                                 $scope.carona.botaoCancelarCarona = false;
 
                                 //reseta o cronometro                                
-                                limpaCronometro();                                
+                                limpaCronometro();
 
                                 // requisição que obtem os dados do motorista
                                 $http({
@@ -626,11 +618,17 @@ angular.module('starter.controllers', ['firebase'])
                             // comportamento padrão quando as requisições são feitas mas não há oferta de carona
                             default:
 
-                                // se o contador de requisições for maior que o limite máximo...
-                                if (caronaIntervalCounter > 8) {
-
+                                // se o contador de requisições for maior que o limite máximo ou quando o cronometro zerar...
+                                if ((cronometroMinutos <= 0) && (cronometroSegundos <= 0)) {
+                                    //reseta o cronometro
+                                    limpaCronometro();
+                                    
                                     // interrompe o loop de requisições
                                     clearInterval(caronaInterval);
+                                    
+                                    // volta a exibir o botão pedir carona
+                                    $scope.carona.botaoPedirCarona = true;
+                                    $scope.carona.botaoCancelarCarona = false;
 
                                     // requisição que remove o pedido de carona do banco de dados
                                     $http({
@@ -638,14 +636,7 @@ angular.module('starter.controllers', ['firebase'])
                                         url: 'https://amber-torch-3328.firebaseio.com/caronas/' + $scope.carona.id + '.json'
 
                                         // caso a requisição seja bem sucedida...
-                                    }).then(function successCallback(response) {
-
-                                        // volta a exibir o botão pedir carona
-                                        $scope.carona.botaoPedirCarona = true;
-                                        $scope.carona.botaoCancelarCarona = false;
-
-                                        //reseta o cronometro                                        
-                                        limpaCronometro();                                        
+                                    }).then(function successCallback(response) {                                       
 
                                         // informa o solicitante que o pedido de carona não foi atendido
                                         var alertPopup = $ionicPopup.alert({
@@ -655,14 +646,7 @@ angular.module('starter.controllers', ['firebase'])
 
                                         // caso a requisição falhe, exibe mensagem de erro
                                     }, function errorCallback(response) {
-
-                                        // volta a exibir o botão pedir carona
-                                        $scope.carona.botaoPedirCarona = true;
-                                        $scope.carona.botaoCancelarCarona = false;
-
-                                        //reseta o cronometro
-                                        limpaCronometro();                                        
-
+                                        
                                         var alertPopup = $ionicPopup.alert({
                                             title: 'Erro',
                                             template: 'Não foi possível acessar o servidor.'
@@ -678,6 +662,8 @@ angular.module('starter.controllers', ['firebase'])
 
                         // caso a requisição falhe, exibe mensagem de erro
                     }, function errorCallback(response) {
+                        //reseta o cronometro                                          
+                        limpaCronometro();
 
                         // interrompe o loop de requisições
                         clearInterval(caronaInterval);
@@ -686,9 +672,6 @@ angular.module('starter.controllers', ['firebase'])
                         $scope.carona.botaoPedirCarona = true;
                         $scope.carona.botaoCancelarCarona = false;
 
-                        //reseta o cronometro                                          
-                        limpaCronometro();                      
-
                         var alertPopup = $ionicPopup.alert({
                             title: 'Erro',
                             template: 'Não foi possível acessar o servidor.'
@@ -696,8 +679,8 @@ angular.module('starter.controllers', ['firebase'])
                     });
 
                     // intervalo das requisições ao banco de dados
-                    // uma requisição a cada 10 segundos
-                }, 10000);
+                    // uma requisição a cada 2 segundos
+                }, 2000);
             }
         };
 
