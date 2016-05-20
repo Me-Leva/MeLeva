@@ -229,7 +229,109 @@ angular.module('starter.controllers', ['firebase'])
             }
 
         };
+        
+        // função que recupera a senha do ususário
+        $scope.recuperarSenha = function () {
 
+            $scope.data = {};
+
+            // popup que solicita o email do usuario
+            var myPopup = $ionicPopup.show({
+                template: '<input type="email" ng-model="data.email">',
+                title: 'Informe o email cadastrado:',
+                scope: $scope,
+                buttons: [
+                    { text: 'Cancelar' },
+                    {
+                        text: '<b>OK</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            if (!$scope.data.email) {
+                                
+                                // impede que o usuário forneça um email em branco
+                                e.preventDefault();
+                            } else {
+                                
+                                // requisição que obtem os dados do usuario
+                                $http({
+                                    method: 'GET',
+                                    url: 'https://amber-torch-3328.firebaseio.com/usuarios.json?orderBy="email"&equalTo="' + $scope.data.email + '"'
+                                    
+                                // caso a requisição seja bem sucedida...
+                                }).then(function successCallback(response) {
+                                    
+                                    // transforma o objeto recebido em string
+                                    var responseString = JSON.stringify(response.data);
+                                    
+                                    // verifica se a string corresponde a um usuario existente
+                                    if (responseString.length > 10) {
+                                        
+                                        // extrai a senha da string
+                                        var startIndex = responseString.search('senha');
+                                        var endIndex = responseString.search('telefone');
+                                        var passwordString = responseString.substring(startIndex + 8, endIndex - 3);
+
+                                        $scope.data.senha = passwordString;
+
+                                        // requisição que envia email com a senha do usuario
+                                        $http({
+
+                                            method: 'POST',
+                                            //url: 'https://api.postmarkapp.com/email',
+                                            url: 'http://localhost:8100/email',
+                                            headers: {
+                                                'Accept': 'application/json',
+                                                'Access-Control-Allow-Origin': '*',
+                                                'Content-Type': 'application/json',
+                                                'X-Postmark-Server-Token': 'ec674a03-ea04-4d61-a8ba-4b2f652ab097'
+                                            },
+                                            data: {
+                                                "From": "c2543836@trbvn.com",
+                                                "To": $scope.data.email,
+                                                "Subject": "Senha do aplicativo MeLeva",
+                                                "HtmlBody": "<p>Olá!</p><p>A sua senha no aplicativo MeLeva é " + $scope.data.senha + ".</p><p>Favor não responder este email automático.</p>"
+                                            }
+
+                                            // caso a requisição seja bem sucedida, informa o usuário que o email foi enviado
+                                        }).then(function successCallback(response) {
+
+                                            var alertPopup = $ionicPopup.alert({
+                                                title: 'Senha enviada por email.'
+                                            });
+
+                                            // caso a requisição falhe, exibe mensagem de erro
+                                        }, function errorCallback(response) {
+
+                                            var alertPopup = $ionicPopup.alert({
+                                                title: 'Erro',
+                                                template: 'Não foi possível enviar a senha por email.'
+                                            });
+
+                                        });                                           
+                                        
+                                    }
+                                    else {
+                                        var alertPopup = $ionicPopup.alert({
+                                            title: 'Erro',
+                                            template: 'O email informado não está cadastrado.'
+                                        });
+                                    }
+                                                                                                         
+                                // caso a requisição falhe, exibe mensagem de erro
+                                }, function errorCallback(response) {
+                                    
+                                    var alertPopup = $ionicPopup.alert({
+                                        title: 'Erro',
+                                        template: 'Não foi possível validar o email informado.'
+                                    });                                                                  
+                                });
+                                                                                                                                                                                                                                                                
+                            }
+                        }
+                    }
+                ]
+            });  
+        };
     })
 
 

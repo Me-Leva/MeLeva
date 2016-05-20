@@ -1,4 +1,10 @@
 {
   "name": "MeLeva",
-  "app_id": ""
+  "app_id": "",
+  "proxies": [
+    {
+      "path": "/email",
+      "proxyUrl": "https://api.postmarkapp.com/email"
+    }
+  ]
 }
