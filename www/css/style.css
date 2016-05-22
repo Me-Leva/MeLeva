@@ -37,3 +37,10 @@ input:focus{
 	font-size: 60px;	
     color: cornflowerblue;      
 }
+ion-popover-view.fit {
+  height: auto;
+  width: 150px;
+}
+ion-popover-view.fit ion-content {
+  position: relative;
+}

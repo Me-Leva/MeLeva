@@ -1,8 +1,11 @@
 <ion-view view-title="Principal">
     <ion-content>
       <ion-header-bar class="bar header bar-calm" style="font-style: italic;" align-title="left">
-        <h1 class="title" id="headertitle">Bem Vindo {{usuarioLogado.nome}}!</h1>
-            <button class="button button-positive" ui-sref='app.login' ng-click="doLogout()">Sair</button>
+        <h1 class="title" id="headertitle">Bem Vindo(a) {{usuarioLogado.nome}}!</h1>
+            <div class="buttons">
+                <button class="button button-icon icon ion-navicon" ng-click="popover.show($event)"></button>
+            </div>
+            <!--<button class="button button-positive" ui-sref='app.login' ng-click="doLogout()">Sair</button>-->
       </ion-header-bar>
         <div>
             <center>

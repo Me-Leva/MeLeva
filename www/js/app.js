@@ -35,6 +35,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'firebase', 'ion-auto
         templateUrl: 'templates/novocadastro.html',
         controller: 'cadastroCtrl'
       })
+      
+      .state('app.alterarcadastro', {
+        url: '/alterarcadastro',
+        templateUrl: 'templates/alterarcadastro.html',
+        controller: 'cadastroCtrl'
+      })
 
       .state('app.principal', {
         url: '/principal',

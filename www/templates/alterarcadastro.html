@@ -1,0 +1,66 @@
+<ion-view view-title="Alterar Cadastro">
+  <ion-header-bar class="bar header bar-calm" style="font-style: italic;">
+        <div align="left" style="padding: 0px 0px 10px 5px"><a ui-sref="app.principal">
+            <img class="small" src="img/meleva_fundo_transparente.png" width="36" height="36"></a>
+        </div>
+        <div>
+            <h1 class="title" style="font-size: 20px">
+        <center>
+          <i>Alterar Cadastro</i>
+        </center>
+      </h1>
+        </div>
+    </ion-header-bar>
+  <ion-content data-ng-init="carregarDadosCadastro()">
+
+  <form name="alterar" ng-submit="alterarCadastro()">
+    <div>
+      <center>
+        <span class="error" ng-show="data.erroMsg != '' ">{{data.erroMsg}}</span>
+      </center>
+    </div>
+    <div class="list">
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="text" name="nome" placeholder="Nome" ng-model="data.nome" ng-disabled="true">
+      </label>
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="number" placeholder="Matrícula" ng-model="data.matricula" ng-disabled="true">
+      </label>
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="password" placeholder="Senha" ng-model="data.senha" ng-required="true" ng-minlength="8">
+      </label>
+
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="text" placeholder="Email" ng-model="data.email" ng-required="true">
+      </label>
+      <br>
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11">
+      </label>
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="text" placeholder="Cidade" ng-model="data.cidade" ng-required="true">
+      </label>
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="text" placeholder="Bairro" ng-model="data.bairro" ng-required="true">
+      </label>
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="text" placeholder="Endereço" ng-model="data.endereco" ng-required="true">
+      </label>
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="text" placeholder="Ponto de Referencia" ng-model="data.pontoreferencia" ng-required="false">
+      </label>
+      <br>
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="text" placeholder="Modelo do Carro" ng-model="data.carro" ng-required="false">
+      </label>
+      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input type="text" placeholder="Cor do Carro" ng-model="data.corcarro" ng-required="false">
+      </label>
+
+      <label class="item">
+        <button name="cadastrar" class="button button-block button-positive" type="submit" ng-disabled="alterar.$invalid">Salvar</button>
+      </label>
+    </div>
+  </form>
+  </ion-content>
+</ion-view>

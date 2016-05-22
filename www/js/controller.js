@@ -336,7 +336,7 @@ angular.module('starter.controllers', ['firebase'])
 
 
     // controller da tela principal
-    .controller('principalCtrl', function ($scope, $state, AuthService) {
+    .controller('principalCtrl', function ($scope, $state, $ionicPopover, AuthService) {
 
         // função que inicia o controlller
         $scope.ini = function () {
@@ -344,14 +344,30 @@ angular.module('starter.controllers', ['firebase'])
         }
 
         //efetua o logout
-        $scope.doLogout = function () {
+        $scope.doLogout = function () {                       
             AuthService.logout();
             $state.go('app.login');
+        };
+        
+        // .fromTemplate() method
+        var template = '<ion-popover-view class="fit"><ion-content><div class="list"><button class="button button-full button-calm" ui-sref="app.alterarcadastro" ng-click="closePopover()">Alterar Cadastro</button><button class="button button-full button-calm" ui-sref="app.login" ng-click="doLogout();closePopover()">Sair</button></div></ion-content></ion-popover-view>';
+
+        $scope.popover = $ionicPopover.fromTemplate(template, {
+            scope: $scope
+        }); 
+
+        $scope.openPopover = function($event) {
+            $scope.popover.show($event);
+        };
+        $scope.closePopover = function() {
+            $scope.popover.hide();
         };
 
         $scope.ini();
 
     })
+
+
 
 
     // controller da tela de pedir carona
@@ -1255,6 +1271,60 @@ angular.module('starter.controllers', ['firebase'])
             $scope.data.corcarro = '';
 
         };
+    
+    //obtem o cadastro do usuario logado
+        $scope.carregarDadosCadastro = function (e) {    
+            $http({
+                method: 'GET',
+                url: URL_GET_USUARIO.replace('{0}', AuthService.matricula()),
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            }).then(function (resp){                
+                $scope.data.matricula = resp.data.matricula;
+                $scope.data.senha = resp.data.senha;
+                $scope.data.nome = resp.data.nome;
+                $scope.data.email = resp.data.email;
+                $scope.data.telefone = resp.data.telefone;
+                $scope.data.cidade = resp.data.cidade;
+                $scope.data.bairro = resp.data.bairro;
+                $scope.data.endereco = resp.data.endereco;
+                $scope.data.pontoreferencia = resp.data.pontoreferencia;
+                $scope.data.carro = resp.data.carro;
+                $scope.data.corcarro = resp.data.corcarro;
+            }, function (err) {
+                    var alertPopup = $ionicPopup.alert({
+                    title: 'Erro',
+                    template: 'Não foi possível validar os dados de cadastro.'
+                    });
+               console.error('ERR', err);
+            });
+        };
+        
+        $scope.alterarCadastro = function () {
+           var repUsuarios = new Firebase(FIREBASE_URL + "usuarios/" + AuthService.matricula());
+
+            // define os dados de cadastro
+            repUsuarios.set({
+                matricula: AuthService.matricula(),
+                senha: $scope.data.senha,
+                bloqueado: false,
+                nome: $scope.data.nome,
+                email: $scope.data.email,
+                telefone: $scope.data.telefone,
+                cidade: $scope.data.cidade,
+                bairro: $scope.data.bairro,
+                endereco: $scope.data.endereco,
+                pontoreferencia: $scope.data.pontoreferencia,
+                carro: $scope.data.carro,
+                corcarro: $scope.data.corcarro
+            });
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Cadastro Atualizado',
+                    template: 'Suas alterações foram salvas com sucesso!'
+                });
+                $state.go('app.principal');
+        };  
     })
 
 
