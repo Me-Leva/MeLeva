@@ -1155,7 +1155,7 @@ angular.module('starter.controllers', ['firebase'])
 
 
     // cadastro
-    .controller('cadastroCtrl', function ($scope, $stateParams, $firebase, $location, $state, $http, $ionicPopup) {
+    .controller('cadastroCtrl', function ($scope, $stateParams, $firebase, $location, $state, $http, $ionicPopup, AuthService) {
 
         // dados de cadastro
         $scope.data = {
