@@ -136,7 +136,7 @@ angular.module('starter.controllers', ['firebase'])
     })
 
     // controller da tela de login
-    .controller('loginCtrl', function ($scope, $rootScope, $ionicModal, $ionicPopup, $timeout, $state, $http, $location, $firebaseArray, AuthService) {
+    .controller('loginCtrl', function ($scope, $rootScope, $ionicModal, $ionicPopup, $timeout, $state, $http, $location, $firebaseArray, $firebase, AuthService) {
 
         // url do banco de dados
         var FIREBASE_URL = "https://amber-torch-3328.firebaseio.com/";
@@ -232,7 +232,7 @@ angular.module('starter.controllers', ['firebase'])
         
         // função que recupera a senha do ususário
         $scope.recuperarSenha = function () {
-
+            
             $scope.data = {};
 
             // popup que solicita o email do usuario
@@ -270,9 +270,29 @@ angular.module('starter.controllers', ['firebase'])
                                         var startIndex = responseString.search('senha');
                                         var endIndex = responseString.search('telefone');
                                         var passwordString = responseString.substring(startIndex + 8, endIndex - 3);
-
-                                        $scope.data.senha = passwordString;
-
+                                        
+                                        //gerar senha randômica
+                                        var novaSenha = 0;
+                                        for (var i=0; i<7; i++){
+			                                novaSenha += getRandomChar();
+		                                }
+                                        
+                                        function getRandomChar(){
+                                            var ascii = [[48, 57],[64,90],[97,122]];
+                                            var i = Math.floor(Math.random()*ascii.length);
+                                            return String.fromCharCode(Math.floor(Math.random()*(ascii[i][1]-ascii[i][0]))+ascii[i][0]);
+                                        }
+                                       $scope.data.senha = novaSenha;
+                                       
+                                       // atualiza os dados do usuario substituindo a senha antiga pela nova senha
+                                       $http({
+                                          method: 'PATCH',
+                                          url: 'https://amber-torch-3328.firebaseio.com/usuarios/' + response.data.matricula +'.json',
+                                          data: {
+                                               'senha': $scope.data.senha
+                                          }// caso a requisição seja bem sucedida...
+                                       });
+                                       
                                         // requisição que envia email com a senha do usuario
                                         $http({
 
@@ -288,9 +308,9 @@ angular.module('starter.controllers', ['firebase'])
                                             data: {
                                                 "From": "c2543836@trbvn.com",
                                                 "To": $scope.data.email,
-                                                "Subject": "Senha do aplicativo MeLeva",
-                                                "HtmlBody": "<p>Olá!</p><p>A sua senha no aplicativo MeLeva é " + $scope.data.senha + ".</p><p>Favor não responder este email automático.</p>"
-                                            }
+                                                "Subject": "Redefinição de Senha - MeLeva!",
+                                                "HtmlBody": "<p>Prezado(a) Usuário(a)</p><p>Conforme solicitado, segue sua senha de acesso ao Aplicativo MeLeva!</p><p><p>Senha: " + $scope.data.senha + ".</p></p><p>Ao acessar o aplicativo, favor acessar a opção 'Alterar Cadastro' e realizar a troca de senha, assim você pode escolher uma de sua preferência, também pode alterar seus dados cadastrais e o e-mail de recebimento deste.</p>Importante: esta é uma mensagem automática e não deve ser respondida.<br>Política de Segurança: O MeLeva! nunca envia arquivos executáveis ou solicitação de dados pessoais. Para sua segurança mantenha atualizado o antivírus do seu computador.<br><br>Atenciosamente,<br>Equipe MeLeva!"
+                                            } 
 
                                             // caso a requisição seja bem sucedida, informa o usuário que o email foi enviado
                                         }).then(function successCallback(response) {
@@ -307,7 +327,7 @@ angular.module('starter.controllers', ['firebase'])
                                                 template: 'Não foi possível enviar a senha por email.'
                                             });
 
-                                        });                                           
+                                        });                                         
                                         
                                     }
                                     else {
@@ -1302,6 +1322,7 @@ angular.module('starter.controllers', ['firebase'])
         };
         
         $scope.alterarCadastro = function () {
+           
            var repUsuarios = new Firebase(FIREBASE_URL + "usuarios/" + AuthService.matricula());
 
             // define os dados de cadastro
