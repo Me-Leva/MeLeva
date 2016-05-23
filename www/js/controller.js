@@ -283,11 +283,17 @@ angular.module('starter.controllers', ['firebase'])
                                             return String.fromCharCode(Math.floor(Math.random()*(ascii[i][1]-ascii[i][0]))+ascii[i][0]);
                                         }
                                        $scope.data.senha = novaSenha;
+                                      
+                                       // acessa matricula do usuário a partir do retorno do GET
+                                       var usuarioMatricula;
+                                       for (var key in response.data) {
+                                            usuarioMatricula = response.data[key].matricula;
+                                       }
                                        
                                        // atualiza os dados do usuario substituindo a senha antiga pela nova senha
                                        $http({
                                           method: 'PATCH',
-                                          url: 'https://amber-torch-3328.firebaseio.com/usuarios/' + response.data.matricula +'.json',
+                                          url: 'https://amber-torch-3328.firebaseio.com/usuarios/' + usuarioMatricula +'.json',
                                           data: {
                                                'senha': $scope.data.senha
                                           }// caso a requisição seja bem sucedida...
@@ -327,7 +333,7 @@ angular.module('starter.controllers', ['firebase'])
                                                 template: 'Não foi possível enviar a senha por email.'
                                             });
 
-                                        });                                         
+                                        });                                       
                                         
                                     }
                                     else {
