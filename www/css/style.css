@@ -44,3 +44,11 @@ ion-popover-view.fit {
 ion-popover-view.fit ion-content {
   position: relative;
 }
+
+div.list label.item-input button.button {
+    min-width: 44px;
+}
+
+div.list label.item-input input.ion-autocomplete {
+    height: 50px;
+}
