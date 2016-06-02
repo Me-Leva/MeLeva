@@ -45,10 +45,10 @@ ion-popover-view.fit ion-content {
   position: relative;
 }
 
-div.list label.item-input button.button {
-    min-width: 44px;
+div#autocompleteBairro {
+    width: 82%;
 }
 
-div.list label.item-input input.ion-autocomplete {
-    height: 50px;
+button#geolocation {
+    float: right;
 }

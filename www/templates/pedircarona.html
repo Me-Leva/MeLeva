@@ -23,8 +23,14 @@
         <span class="error" ng-show="carona.erro">{{carona.erroMsg}}</span>
       </center>
     </div>
-    <div class="list">
-      <label class="item item-input item-button-right">
+    
+    <button id="geolocation" class="button button-positive" ng-disabled="carona.mostrarDestino" ng-click="geolocalizacao()">
+      <i class="icon ion-location"></i>
+    </button>    
+    
+    <div id="autocompleteBairro" class="list">
+      
+      <label class="item item-input">
 		  
 		  <input ion-autocomplete type="text" readonly="readonly" class="ion-autocomplete" autocomplete="off"
                        item-value-key="id"
@@ -53,10 +59,9 @@
 				 		select-items-label="Selecione o bairro"
 				 		selected-items-label="Bairro selecionado"
 				 		ng-show="carona.mostrarOrigem" ng-model="carona.origem" ng-required="true"/>
-             
-      <button class="button button-positive icon ion-location"></button>             
+                         
       </label>
-            
+      
     </div>
 
     <div>

@@ -463,6 +463,15 @@ angular.module('starter.controllers', ['firebase'])
                 $scope.carona.numPessoas -= 1;
             }
         };
+        
+        // função que obtem a geolocalização do usuário
+        $scope.geolocalizacao = function () {
+                        
+            var alertPopup = $ionicPopup.alert({
+                title: 'Geolocalização'
+            });
+            
+        }
 
         // função que cancela o pedido de carona
         $scope.cancelarCarona = function () {
