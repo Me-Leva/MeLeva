@@ -464,12 +464,37 @@ angular.module('starter.controllers', ['firebase'])
             }
         };
         
-        // função que obtem a geolocalização do usuário
-        $scope.geolocalizacao = function () {
-                        
-            var alertPopup = $ionicPopup.alert({
-                title: 'Geolocalização'
-            });
+        // função que obtem a localização do usuário
+        $scope.localizacao = function () {
+            
+            // onSuccess callback
+            var onSuccess = function (position) {
+                
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Localização',
+                    template: 
+                    'Latitude: ' + position.coords.latitude + '\n' +
+                    'Longitude: ' + position.coords.longitude + '\n'
+                    //'Altitude: ' + position.coords.altitude + '\n' +
+                    //'Accuracy: ' + position.coords.accuracy + '\n' +
+                    //'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
+                    //'Heading: ' + position.coords.heading + '\n' +
+                    //'Speed: ' + position.coords.speed + '\n' +
+                    //'Timestamp: ' + position.timestamp + '\n'
+                });
+            };
+
+            // onError callback
+            function onError(error) {
+                
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Erro',
+                    template: 'code: ' + error.code + '\n' + 'message: ' + error.message + '\n'
+                });                
+            }
+
+            // função que aciona o sistema de localização do dispositivo
+            navigator.geolocation.getCurrentPosition(onSuccess, onError, { maximumAge: 10000, timeout: 5000, enableHighAccuracy: true });                        
             
         }
 
