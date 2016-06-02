@@ -470,18 +470,37 @@ angular.module('starter.controllers', ['firebase'])
             // onSuccess callback
             var onSuccess = function (position) {
                 
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Localização',
-                    template: 
-                    'Latitude: ' + position.coords.latitude + '\n' +
-                    'Longitude: ' + position.coords.longitude + '\n'
-                    //'Altitude: ' + position.coords.altitude + '\n' +
-                    //'Accuracy: ' + position.coords.accuracy + '\n' +
-                    //'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
-                    //'Heading: ' + position.coords.heading + '\n' +
-                    //'Speed: ' + position.coords.speed + '\n' +
-                    //'Timestamp: ' + position.timestamp + '\n'
+                // requisição que obtem os dados de localizacao
+                $http({
+                    method: 'GET',
+                    url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + 
+                        position.coords.latitude + ',' + 
+                        position.coords.longitude + 
+                        '&key=AIzaSyBxMbfBfBD9_EgV8KDnI5eAMxxv1RwDcsM'
+
+                // caso a requisição seja bem sucedida...
+                }).then(function successCallback(response) {
+                    
+                    // extrai o bairro e a cidade do objeto recebido
+                    var localString = response.data.results[1].formatted_address
+                    localString = localString.split(', ')
+                    bairroString = localString[0]
+                    localString = localString[1].split(' - ')
+                    cidadeString = localString[0]
+                    
+                    // exibe o bairro e a cidade no campo apropriado
+                    $scope.carona.origem = bairroString + ' - ' + cidadeString
+
+                // caso a requisição falhe, exibe mensagem de erro
+                }, function errorCallback(response) {
+
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Erro',
+                        template: 'Não foi possível obter a sua localização.'
+                    });
+
                 });
+                
             };
 
             // onError callback
