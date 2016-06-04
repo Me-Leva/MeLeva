@@ -229,10 +229,10 @@ angular.module('starter.controllers', ['firebase'])
             }
 
         };
-        
+
         // função que recupera a senha do ususário
         $scope.recuperarSenha = function () {
-            
+
             $scope.data = {};
 
             // popup que solicita o email do usuario
@@ -245,60 +245,60 @@ angular.module('starter.controllers', ['firebase'])
                     {
                         text: '<b>OK</b>',
                         type: 'button-positive',
-                        onTap: function(e) {
+                        onTap: function (e) {
                             if (!$scope.data.email) {
-                                
+
                                 // impede que o usuário forneça um email em branco
                                 e.preventDefault();
                             } else {
-                                
+
                                 // requisição que obtem os dados do usuario
                                 $http({
                                     method: 'GET',
                                     url: 'https://amber-torch-3328.firebaseio.com/usuarios.json?orderBy="email"&equalTo="' + $scope.data.email + '"'
-                                    
-                                // caso a requisição seja bem sucedida...
+
+                                    // caso a requisição seja bem sucedida...
                                 }).then(function successCallback(response) {
-                                    
+
                                     // transforma o objeto recebido em string
                                     var responseString = JSON.stringify(response.data);
-                                    
+
                                     // verifica se a string corresponde a um usuario existente
                                     if (responseString.length > 10) {
-                                        
+
                                         // extrai a senha da string
                                         var startIndex = responseString.search('senha');
                                         var endIndex = responseString.search('telefone');
                                         var passwordString = responseString.substring(startIndex + 8, endIndex - 3);
-                                        
+
                                         //gerar senha randômica
                                         var novaSenha = 0;
-                                        for (var i=0; i<7; i++){
-			                                novaSenha += getRandomChar();
-		                                }
-                                        
-                                        function getRandomChar(){
-                                            var ascii = [[48, 57],[64,90],[97,122]];
-                                            var i = Math.floor(Math.random()*ascii.length);
-                                            return String.fromCharCode(Math.floor(Math.random()*(ascii[i][1]-ascii[i][0]))+ascii[i][0]);
+                                        for (var i = 0; i < 7; i++) {
+                                            novaSenha += getRandomChar();
                                         }
-                                       $scope.data.senha = novaSenha;
-                                      
-                                       // acessa matricula do usuário a partir do retorno do GET
-                                       var usuarioMatricula;
-                                       for (var key in response.data) {
+
+                                        function getRandomChar() {
+                                            var ascii = [[48, 57], [64, 90], [97, 122]];
+                                            var i = Math.floor(Math.random() * ascii.length);
+                                            return String.fromCharCode(Math.floor(Math.random() * (ascii[i][1] - ascii[i][0])) + ascii[i][0]);
+                                        }
+                                        $scope.data.senha = novaSenha;
+
+                                        // acessa matricula do usuário a partir do retorno do GET
+                                        var usuarioMatricula;
+                                        for (var key in response.data) {
                                             usuarioMatricula = response.data[key].matricula;
-                                       }
-                                       
-                                       // atualiza os dados do usuario substituindo a senha antiga pela nova senha
-                                       $http({
-                                          method: 'PATCH',
-                                          url: 'https://amber-torch-3328.firebaseio.com/usuarios/' + usuarioMatricula +'.json',
-                                          data: {
-                                               'senha': $scope.data.senha
-                                          }// caso a requisição seja bem sucedida...
-                                       });
-                                       
+                                        }
+
+                                        // atualiza os dados do usuario substituindo a senha antiga pela nova senha
+                                        $http({
+                                            method: 'PATCH',
+                                            url: 'https://amber-torch-3328.firebaseio.com/usuarios/' + usuarioMatricula + '.json',
+                                            data: {
+                                                'senha': $scope.data.senha
+                                            }// caso a requisição seja bem sucedida...
+                                        });
+
                                         // requisição que envia email com a senha do usuario
                                         $http({
 
@@ -316,7 +316,7 @@ angular.module('starter.controllers', ['firebase'])
                                                 "To": $scope.data.email,
                                                 "Subject": "Redefinição de Senha - MeLeva!",
                                                 "HtmlBody": "<p>Prezado(a) Usuário(a)</p><p>Conforme solicitado, segue sua senha de acesso ao Aplicativo MeLeva!</p><p><p>Sua senha foi redefinida para: " + $scope.data.senha + ".</p></p><p>Ao acessar o aplicativo, favor selecionar a opção 'Alterar Cadastro' e realizar a troca de senha, assim você poderá escolher uma de sua preferência. Também poderá alterar seus dados cadastrais, incluindo o e-mail para recebimento de nova senha.</p>Importante: esta é uma mensagem automática e não deve ser respondida.<br>Política de Segurança: O MeLeva! nunca envia arquivos executáveis ou solicitação de dados pessoais. Para sua segurança mantenha atualizado o antivírus do seu computador.<br><br>Atenciosamente,<br>Equipe MeLeva!"
-                                            } 
+                                            }
 
                                             // caso a requisição seja bem sucedida, informa o usuário que o email foi enviado
                                         }).then(function successCallback(response) {
@@ -333,8 +333,8 @@ angular.module('starter.controllers', ['firebase'])
                                                 template: 'Não foi possível enviar a senha por email.'
                                             });
 
-                                        });                                       
-                                        
+                                        });
+
                                     }
                                     else {
                                         var alertPopup = $ionicPopup.alert({
@@ -342,21 +342,21 @@ angular.module('starter.controllers', ['firebase'])
                                             template: 'O email informado não está cadastrado.'
                                         });
                                     }
-                                                                                                         
-                                // caso a requisição falhe, exibe mensagem de erro
+
+                                    // caso a requisição falhe, exibe mensagem de erro
                                 }, function errorCallback(response) {
-                                    
+
                                     var alertPopup = $ionicPopup.alert({
                                         title: 'Erro',
                                         template: 'Não foi possível validar o email informado.'
-                                    });                                                                  
+                                    });
                                 });
-                                                                                                                                                                                                                                                                
+
                             }
                         }
                     }
                 ]
-            });  
+            });
         };
     })
 
@@ -370,22 +370,22 @@ angular.module('starter.controllers', ['firebase'])
         }
 
         //efetua o logout
-        $scope.doLogout = function () {                       
+        $scope.doLogout = function () {
             AuthService.logout();
             $state.go('app.login');
         };
-        
+
         // .fromTemplate() method
         var template = '<ion-popover-view class="fit"><ion-content><div class="list"><button class="button button-full button-calm" ui-sref="app.alterarcadastro" ng-click="closePopover()">Alterar Cadastro</button><button class="button button-full button-calm" ui-sref="app.login" ng-click="doLogout();closePopover()">Sair</button></div></ion-content></ion-popover-view>';
 
         $scope.popover = $ionicPopover.fromTemplate(template, {
             scope: $scope
-        }); 
+        });
 
-        $scope.openPopover = function($event) {
+        $scope.openPopover = function ($event) {
             $scope.popover.show($event);
         };
-        $scope.closePopover = function() {
+        $scope.closePopover = function () {
             $scope.popover.hide();
         };
 
@@ -463,35 +463,35 @@ angular.module('starter.controllers', ['firebase'])
                 $scope.carona.numPessoas -= 1;
             }
         };
-        
+
         // função que obtem a localização do usuário
         $scope.localizacao = function () {
-            
+
             // onSuccess callback
             var onSuccess = function (position) {
-                
+
                 // requisição que obtem os dados de localizacao
                 $http({
                     method: 'GET',
-                    url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + 
-                        position.coords.latitude + ',' + 
-                        position.coords.longitude + 
-                        '&key=AIzaSyBxMbfBfBD9_EgV8KDnI5eAMxxv1RwDcsM'
+                    url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                    position.coords.latitude + ',' +
+                    position.coords.longitude +
+                    '&key=AIzaSyBxMbfBfBD9_EgV8KDnI5eAMxxv1RwDcsM'
 
-                // caso a requisição seja bem sucedida...
+                    // caso a requisição seja bem sucedida...
                 }).then(function successCallback(response) {
-                    
+
                     // extrai o bairro e a cidade do objeto recebido
                     var localString = response.data.results[1].formatted_address
                     localString = localString.split(', ')
                     bairroString = localString[0]
                     localString = localString[1].split(' - ')
                     cidadeString = localString[0]
-                    
+
                     // exibe o bairro e a cidade no campo apropriado
                     $scope.carona.origem = bairroString + ' - ' + cidadeString
 
-                // caso a requisição falhe, exibe mensagem de erro
+                    // caso a requisição falhe, exibe mensagem de erro
                 }, function errorCallback(response) {
 
                     var alertPopup = $ionicPopup.alert({
@@ -500,21 +500,21 @@ angular.module('starter.controllers', ['firebase'])
                     });
 
                 });
-                
+
             };
 
             // onError callback
             function onError(error) {
-                
+
                 var alertPopup = $ionicPopup.alert({
                     title: 'Erro',
                     template: 'code: ' + error.code + '\n' + 'message: ' + error.message + '\n'
-                });                
+                });
             }
 
             // função que aciona o sistema de localização do dispositivo
-            navigator.geolocation.getCurrentPosition(onSuccess, onError, { maximumAge: 10000, timeout: 5000, enableHighAccuracy: true });                        
-            
+            navigator.geolocation.getCurrentPosition(onSuccess, onError, { maximumAge: 10000, timeout: 5000, enableHighAccuracy: true });
+
         }
 
         // função que cancela o pedido de carona
@@ -675,6 +675,7 @@ angular.module('starter.controllers', ['firebase'])
                     },
                     'status': 'pendente',
                     'vagas': $scope.carona.numPessoas,
+                    'numRecomendacao': 0,
                     'motorista': false,
                     'solicitante': {
                         'matricula': usuarioLogado.matricula,
@@ -694,6 +695,8 @@ angular.module('starter.controllers', ['firebase'])
                 var caronaIntervalCounter = 0;
                 var nomeMotorista = '';
                 var telefoneMotorista = '';
+                var numRecomendacao = 0;
+                var matriculaMotorista = '';
 
                 // a cada 10 segundos, uma nova requisição é gerada
                 // objetivo: verificar se algum motorista ofereceu carona
@@ -738,60 +741,85 @@ angular.module('starter.controllers', ['firebase'])
                                     // armazena os dados do motorista
                                     nomeMotorista = response.data.nome;
                                     telefoneMotorista = response.data.telefone;
+                                    matriculaMotorista = response.data.matricula;
 
-                                    // pergunta se o solicitante deseja aceitar a carona oferecida
-                                    var confirmPopup = $ionicPopup.confirm({
-                                        title: 'Carona Oferecida',
-                                        template: '<p>Deseja pegar carona com ' + nomeMotorista + '?</p>'
-                                    });
+                                    // requisição que obtem as recomendações do motorista
+                                    $http({
+                                        method: 'GET',
+                                        url: 'https://amber-torch-3328.firebaseio.com/caronas/.json'
 
-                                    // resposta do solicitante
-                                    confirmPopup.then(function (res) {
-
-                                        // caso a resposta seja positiva...
-                                        if (res) {
-
-                                            // requisição que grava o status 'aceita' no banco de dados
-                                            $http({
-                                                method: 'PATCH',
-                                                url: 'https://amber-torch-3328.firebaseio.com/caronas/' + $scope.carona.id + '.json',
-                                                data: {
-                                                    'status': 'aceita'
-                                                }
-
-                                                // caso a requisição seja bem sucedida...
-                                            }).then(function successCallback(response) {
-
-                                                // exibe o nome e o telefone do motorista
-                                                var alertPopup = $ionicPopup.alert({
-                                                    title: 'Telefone do Motorista',
-                                                    template: '<p>' + nomeMotorista + '</p>' + '</br>' + '<p>' + telefoneMotorista + '</p>'
-                                                });
-
-                                                // caso a requisição falhe, exibe mensagem de erro
-                                            }, function errorCallback(response) {
-
-                                                var alertPopup = $ionicPopup.alert({
-                                                    title: 'Erro',
-                                                    template: 'Não foi possível aceitar a carona.'
-                                                });
-                                            });
-
-                                            // caso a resposta seja negativa...
-                                        } else {
-
-                                            // requisição que grava o status 'recusada' no banco de dados
-                                            // e remove os dados do motorista que ofereceu a carona
-                                            $http({
-                                                method: 'PATCH',
-                                                url: 'https://amber-torch-3328.firebaseio.com/caronas/' + $scope.carona.id + '.json',
-                                                data: {
-                                                    'status': 'recusada',
-                                                    'motorista': false
-                                                }
-                                            });
+                                        // caso a requisição de recomendações seja bem sucedida...
+                                    }).then(function successCallback(response) {
+                                        // transforma o objeto recebido como resultado em um array dentro do escopo                                        
+                                        for (var key in response.data) {
+                                            var aux = response.data[key];
+                                            //se houver recomendações para o motorista que ofereceu carona
+                                            if ((aux.numRecomendacao > 0) && (aux.motorista.matricula == matriculaMotorista)) {
+                                                numRecomendacao += aux.numRecomendacao;
+                                            }
                                         }
-                                    });
+                                        // pergunta se o solicitante deseja aceitar a carona oferecida
+                                        var confirmPopup = $ionicPopup.confirm({
+                                            title: 'Carona Oferecida',
+                                            template: '<p>Deseja pegar carona com ' + nomeMotorista + '  <i class="icon ion-thumbsup"> ' + numRecomendacao + '</i> ?</p>'
+                                        });
+
+                                        // resposta do solicitante
+                                        confirmPopup.then(function (res) {
+
+                                            // caso a resposta seja positiva...
+                                            if (res) {
+
+                                                // requisição que grava o status 'aceita' no banco de dados
+                                                $http({
+                                                    method: 'PATCH',
+                                                    url: 'https://amber-torch-3328.firebaseio.com/caronas/' + $scope.carona.id + '.json',
+                                                    data: {
+                                                        'status': 'aceita'
+                                                    }
+
+                                                    // caso a requisição seja bem sucedida...
+                                                }).then(function successCallback(response) {
+                                                    // exibe o nome e o telefone do motorista
+                                                    var alertPopup = $ionicPopup.alert({
+                                                        title: 'Telefone do Motorista',
+                                                        template: '<p>' + nomeMotorista + '</p>' + '</br>' + '<p>' + telefoneMotorista + '</p>'
+                                                    });
+
+                                                    // caso a requisição falhe, exibe mensagem de erro
+                                                }, function errorCallback(response) {
+
+                                                    var alertPopup = $ionicPopup.alert({
+                                                        title: 'Erro',
+                                                        template: 'Não foi possível aceitar a carona.'
+                                                    });
+                                                });
+                                                // caso a resposta seja negativa...
+                                            } else {
+                                                // requisição que grava o status 'recusada' no banco de dados
+                                                // e remove os dados do motorista que ofereceu a carona
+                                                $http({
+                                                    method: 'PATCH',
+                                                    url: 'https://amber-torch-3328.firebaseio.com/caronas/' + $scope.carona.id + '.json',
+                                                    data: {
+                                                        'status': 'recusada',
+                                                        'motorista': false
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    },// caso a requisição de recomendações falhe, 
+                                        function errorCallback(response) {
+                                            //zera as recomendações pois deu erro
+                                            numRecomendacao = 0;
+                                            
+                                            clearInterval(caronaInterval);
+
+                                            var alertPopup = $ionicPopup.alert({
+                                                title: 'Erro',
+                                                template: 'Não foi possível obter os dados do motorista.'
+                                            });
+                                        });
                                 },
                                     // caso a requisição falhe, exibe mensagem de erro
                                     function errorCallback(response) {
@@ -819,10 +847,10 @@ angular.module('starter.controllers', ['firebase'])
                                 if ((cronometroMinutos <= 0) && (cronometroSegundos <= 0)) {
                                     //reseta o cronometro
                                     limpaCronometro();
-                                    
+
                                     // interrompe o loop de requisições
                                     clearInterval(caronaInterval);
-                                    
+
                                     // volta a exibir o botão pedir carona
                                     $scope.carona.botaoPedirCarona = true;
                                     $scope.carona.botaoCancelarCarona = false;
@@ -833,7 +861,7 @@ angular.module('starter.controllers', ['firebase'])
                                         url: 'https://amber-torch-3328.firebaseio.com/caronas/' + $scope.carona.id + '.json'
 
                                         // caso a requisição seja bem sucedida...
-                                    }).then(function successCallback(response) {                                       
+                                    }).then(function successCallback(response) {
 
                                         // informa o solicitante que o pedido de carona não foi atendido
                                         var alertPopup = $ionicPopup.alert({
@@ -843,7 +871,7 @@ angular.module('starter.controllers', ['firebase'])
 
                                         // caso a requisição falhe, exibe mensagem de erro
                                     }, function errorCallback(response) {
-                                        
+
                                         var alertPopup = $ionicPopup.alert({
                                             title: 'Erro',
                                             template: 'Não foi possível acessar o servidor.'
@@ -1350,16 +1378,16 @@ angular.module('starter.controllers', ['firebase'])
             $scope.data.corcarro = '';
 
         };
-    
-    //obtem o cadastro do usuario logado
-        $scope.carregarDadosCadastro = function (e) {    
+
+        //obtem o cadastro do usuario logado
+        $scope.carregarDadosCadastro = function (e) {
             $http({
                 method: 'GET',
                 url: URL_GET_USUARIO.replace('{0}', AuthService.matricula()),
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 }
-            }).then(function (resp){                
+            }).then(function (resp) {
                 $scope.data.matricula = resp.data.matricula;
                 $scope.data.senha = resp.data.senha;
                 $scope.data.nome = resp.data.nome;
@@ -1372,17 +1400,17 @@ angular.module('starter.controllers', ['firebase'])
                 $scope.data.carro = resp.data.carro;
                 $scope.data.corcarro = resp.data.corcarro;
             }, function (err) {
-                    var alertPopup = $ionicPopup.alert({
+                var alertPopup = $ionicPopup.alert({
                     title: 'Erro',
                     template: 'Não foi possível validar os dados de cadastro.'
-                    });
-               console.error('ERR', err);
+                });
+                console.error('ERR', err);
             });
         };
-        
+
         $scope.alterarCadastro = function () {
-           
-           var repUsuarios = new Firebase(FIREBASE_URL + "usuarios/" + AuthService.matricula());
+
+            var repUsuarios = new Firebase(FIREBASE_URL + "usuarios/" + AuthService.matricula());
 
             // define os dados de cadastro
             repUsuarios.set({
@@ -1399,12 +1427,12 @@ angular.module('starter.controllers', ['firebase'])
                 carro: $scope.data.carro,
                 corcarro: $scope.data.corcarro
             });
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Cadastro Atualizado',
-                    template: 'Suas alterações foram salvas com sucesso!'
-                });
-                $state.go('app.principal');
-        };  
+            var alertPopup = $ionicPopup.alert({
+                title: 'Cadastro Atualizado',
+                template: 'Suas alterações foram salvas com sucesso!'
+            });
+            $state.go('app.principal');
+        };
     })
 
 
@@ -1459,6 +1487,7 @@ angular.module('starter.controllers', ['firebase'])
 
                     if ((aux.motorista.matricula == matricula) || (aux.solicitante.matricula == matricula)) {
                         aux.mostrarDetalhe = false;
+                        aux.id = key;
                         $scope.historico.push(aux);
                     }
                 }
@@ -1468,6 +1497,37 @@ angular.module('starter.controllers', ['firebase'])
                 function (err) {
                     console.error('ERR', err);
                 });
+
+        }
+
+        // função para recomendar o motorista 
+        $scope.recomendar = function (idCarona, numRecomendacao) {
+
+            // requisição que adiciona os dados do motorista ao pedido de carona
+            $http({
+                method: 'PATCH',
+                url: 'https://amber-torch-3328.firebaseio.com/caronas/' + idCarona + '.json',
+                data: {
+                    'numRecomendacao': numRecomendacao
+                }
+
+                // caso a requisição seja bem sucedida...
+            }).then(function successCallback(response) {
+
+                $scope.historico.forEach(function (item) {
+                    if (item.id == idCarona) {
+                        item.numRecomendacao = numRecomendacao;
+                    }
+                });
+            },
+                // caso a requisição falhe, exibe mensagem de erro
+                function errorCallback(response) {
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Erro',
+                        template: 'Não foi possível recomendar a carona.'
+                    });
+                });
+
 
         }
 

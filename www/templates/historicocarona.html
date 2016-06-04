@@ -1,6 +1,8 @@
 <ion-view view-title="Histórico de Caronas">
     <ion-header-bar class="bar header bar-calm" style="font-style: italic;">
-        <div align="left" style="padding: 0px 0px 10px 5px"><a ui-sref="app.principal"> <img class="small" src="img/meleva_fundo_transparente.png" width="35" height="35"></a></div>
+        <div align="left" style="padding: 0px 0px 10px 5px">
+            <a ui-sref="app.principal"> <img class="small" src="img/meleva_fundo_transparente.png" width="35" height="35"></a>
+        </div>
         <div>
             <h1 class="title" style="font-size: 20px">
         <center>
@@ -12,10 +14,18 @@
     <ion-content>
         <ion-list>
             <ion-item ng-repeat="item in historico">
-                <div class="item item-body" ng-click="item.mostrarDetalhe = !item.mostrarDetalhe">
-                   <span><b>Motorista:</b></span> {{item.motorista.nome}} / {{item.motorista.telefone}} </br> 
-                    <span><b>Dia:</b></span> {{item.data}} <span><b>às</b></span> {{item.hora}}
-                </div>
+                <div class="item item-body">
+                    <div class="divHistoricoEsquerda" ng-click="item.mostrarDetalhe = !item.mostrarDetalhe">
+                        <span><b>Motorista:</b></span> {{item.motorista.nome}} / {{item.motorista.telefone}} </br>
+                        <span><b>Dia:</b></span> {{item.data}} <span><b>às</b></span> {{item.hora}}
+                    </div>
+                    <div class="divHistoricoDireita" ng-show="item.numRecomendacao == 0 && item.motorista.matricula !== item.solicitante.matricula">
+                        <button class="button button-clear button-medium ion-thumbsup button-stable" ng-click="recomendar(item.id, 1)">
+                    </div>
+                    <div class="divHistoricoDireita" ng-show="item.numRecomendacao !== 0 && item.motorista.matricula !== item.solicitante.matricula">
+                        <button class="button button-clear button-medium ion-thumbsup button-balanced" ng-click="recomendar(item.id, 0)" >
+                    </div>
+                </div>                
                 <div ng-show="item.mostrarDetalhe" ng-click="item.mostrarDetalhe = !item.mostrarDetalhe">
                     <div class="item item-body" style="background-color: beige;">
                         <span><b>Origem:</b></span> {{item.origem.bairro}} - {{item.origem.cidade}}

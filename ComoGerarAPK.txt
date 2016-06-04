@@ -7,4 +7,4 @@ Assinar a APK com o certificado
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore melevachave.keystore platforms/android/build/outputs/apk/android-release-unsigned.apk meleva
 
 alinhar a APK
-zipalign -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk MeLeva-1_0.apk
+zipalign -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk MeLeva-1_2.apk

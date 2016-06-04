@@ -52,3 +52,10 @@ div#autocompleteBairro {
 button#geolocation {
     float: right;
 }
+.divHistoricoEsquerda{
+    float: left;    
+}
+.divHistoricoDireita{
+    float: right;
+    max-width: 15%;
+}
