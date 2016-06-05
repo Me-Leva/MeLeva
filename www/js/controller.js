@@ -699,7 +699,7 @@ angular.module('starter.controllers', ['firebase'])
                 var numCarona = 0;
                 var matriculaMotorista = '';
 
-                // a cada 10 segundos, uma nova requisição é gerada
+                // a cada 05 segundos, uma nova requisição é gerada
                 // objetivo: verificar se algum motorista ofereceu carona
                 // há um contador que interrompe o loop após X requisições
                 var caronaInterval = setInterval(function () {
@@ -809,8 +809,7 @@ angular.module('starter.controllers', ['firebase'])
                                                     url: 'https://amber-torch-3328.firebaseio.com/caronas/' + $scope.carona.id + '.json',
                                                     data: {
                                                         'status': 'recusada',
-                                                        'motorista': false
-                                                    }
+                                                        'motorista': false                                                    }
                                                 });
                                             }
                                         });
@@ -910,8 +909,8 @@ angular.module('starter.controllers', ['firebase'])
                     });
 
                     // intervalo das requisições ao banco de dados
-                    // uma requisição a cada 2 segundos
-                }, 2000);
+                    // uma requisição a cada 5 segundos
+                }, 5000);
             }
         };
 

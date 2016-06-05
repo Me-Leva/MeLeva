@@ -27,29 +27,43 @@
       <label class="item item-input" style="background-color: WhiteSmoke;">
         <input type="text" name="nome" placeholder="Nome" ng-model="data.nome" ng-required="true">
       </label>
+      <center><span class="error" ng-show="novo.nome.$invalid || novo.nome.$pristine">É necessário informar um nome</span></center>
+      
       <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="number" placeholder="Matrícula" ng-model="data.matricula" ng-required="true">
+        <input name="matricula" type="number" placeholder="Matrícula" ng-model="data.matricula" ng-required="true">
       </label>
+      <center><span class="error" ng-show="novo.matricula.$invalid || novo.matricula.$pristine">É necessário informar uma matricula</span></center>
+      
       <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="password" placeholder="Senha" ng-model="data.senha" ng-required="true" ng-minlength="8">
+        <input name="senha" type="password" placeholder="Senha" ng-model="data.senha" ng-required="true" ng-minlength="8">
       </label>
+      <center><span class="error" ng-show="novo.senha.$invalid || novo.senha.$pristine">Senha no mínimo de 8 caracteres</span></center>
 
       <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Email" ng-model="data.email" ng-required="true">
+        <input name="email" type="text" placeholder="Email" ng-model="data.email" ng-required="true">
       </label>
+      <center><span class="error" ng-show="novo.email.$invalid || novo.email.$pristine">É necessário informar um email</span></center>
       <br>
       <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11">
+        <input name="telefone" type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11" ng-maxlength="11">
       </label>
+      <center><span class="error" ng-show="novo.telefone.$invalid || novo.telefone.$pristine">Telefone no mínimo com 11 caracteres</span></center>
+      
       <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Cidade" ng-model="data.cidade" ng-required="true">
+        <input name="cidade" type="text" placeholder="Cidade" ng-model="data.cidade" ng-required="true">
       </label>
+      <center><span class="error" ng-show="novo.cidade.$invalid || novo.cidade.$pristine">É necessário informar uma cidade</span></center>
+      
       <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Bairro" ng-model="data.bairro" ng-required="true">
+        <input name="bairro" type="text" placeholder="Bairro" ng-model="data.bairro" ng-required="true">
       </label>
+      <center><span class="error" ng-show="novo.bairro.$invalid  || novo.bairro.$pristine">É necessário informar um bairro</span></center>
+      
       <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Endereço" ng-model="data.endereco" ng-required="true">
+        <input name="endereco" type="text" placeholder="Endereço" ng-model="data.endereco" ng-required="true">
       </label>
+      <center><span class="error" ng-show="novo.endereco.$invalid || novo.endereco.$pristine">É necessário informar um endereço</span></center>
+      
       <label class="item item-input" style="background-color: WhiteSmoke;">
         <input type="text" placeholder="Ponto de Referencia" ng-model="data.pontoreferencia" ng-required="false">
       </label>

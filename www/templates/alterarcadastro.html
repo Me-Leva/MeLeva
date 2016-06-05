@@ -1,66 +1,79 @@
 <ion-view view-title="Alterar Cadastro">
   <ion-header-bar class="bar header bar-calm" style="font-style: italic;">
-        <div align="left" style="padding: 0px 0px 10px 5px"><a ui-sref="app.principal">
-            <img class="small" src="img/meleva_fundo_transparente.png" width="36" height="36"></a>
-        </div>
-        <div>
-            <h1 class="title" style="font-size: 20px">
+    <div align="left" style="padding: 0px 0px 10px 5px">
+      <a ui-sref="app.principal">
+        <img class="small" src="img/meleva_fundo_transparente.png" width="36" height="36"></a>
+    </div>
+    <div>
+      <h1 class="title" style="font-size: 20px">
         <center>
           <i>Alterar Cadastro</i>
         </center>
       </h1>
-        </div>
-    </ion-header-bar>
+    </div>
+  </ion-header-bar>
   <ion-content data-ng-init="carregarDadosCadastro()">
 
-  <form name="alterar" ng-submit="alterarCadastro()">
-    <div>
-      <center>
-        <span class="error" ng-show="data.erroMsg != '' ">{{data.erroMsg}}</span>
-      </center>
-    </div>
-    <div class="list">
-      <label class="item item-input" style="background-color: WhiteSmoke;">
+    <form name="alterar" ng-submit="alterarCadastro()">
+      <div>
+        <center>
+          <span class="error" ng-show="data.erroMsg != '' ">{{data.erroMsg}}</span>
+        </center>
+      </div>
+      <div class="list">
+        <label class="item item-input" style="background-color: WhiteSmoke;">
         <input type="text" name="nome" placeholder="Nome" ng-model="data.nome" ng-disabled="true">
+      </label>     
+        <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input name="matricula" type="number" placeholder="Matrícula" ng-model="data.matricula" ng-disabled="true">
       </label>
-      <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="number" placeholder="Matrícula" ng-model="data.matricula" ng-disabled="true">
+      
+        <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input name="senha" type="password" placeholder="Senha" ng-model="data.senha" ng-required="true" ng-minlength="8">
       </label>
-      <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="password" placeholder="Senha" ng-model="data.senha" ng-required="true" ng-minlength="8">
-      </label>
+        <center><span class="error" ng-show="alterar.senha.$invalid">A senha deve ter no mínimo 8 caracteres</span></center>
 
-      <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Email" ng-model="data.email" ng-required="true">
+        <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input name="email" type="text" placeholder="Email" ng-model="data.email" ng-required="true">
       </label>
-      <br>
-      <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11">
+      <center><span class="error" ng-show="alterar.email.$invalid">É necessário informar um email</span></center>
+        <br>
+        
+        <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input name="telefone" type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11" ng-maxlength="11">
       </label>
-      <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Cidade" ng-model="data.cidade" ng-required="true">
+      <center><span class="error" ng-show="alterar.telefone.$invalid">O telefone deve ter no mínimo 11 digítos</span></center>
+
+        <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input name="cidade" type="text" placeholder="Cidade" ng-model="data.cidade" ng-required="true">
       </label>
-      <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Bairro" ng-model="data.bairro" ng-required="true">
+      <center><span class="error" ng-show="alterar.cidade.$invalid">É necessário informar uma cidade</span></center>
+      
+        <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input name="bairro" type="text" placeholder="Bairro" ng-model="data.bairro" ng-required="true">
       </label>
-      <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Endereço" ng-model="data.endereco" ng-required="true">
+      <center><span class="error" ng-show="alterar.bairro.$invalid">É necessário informar um bairro</span></center>
+      
+        <label class="item item-input" style="background-color: WhiteSmoke;">
+        <input name="endereco" type="text" placeholder="Endereço" ng-model="data.endereco" ng-required="true">
       </label>
-      <label class="item item-input" style="background-color: WhiteSmoke;">
+      <center><span class="error" ng-show="alterar.endereco.$invalid">É necessário informar um endereço</span></center>
+      
+        <label class="item item-input" style="background-color: WhiteSmoke;">
         <input type="text" placeholder="Ponto de Referencia" ng-model="data.pontoreferencia" ng-required="false">
       </label>
-      <br>
-      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <br>
+        <label class="item item-input" style="background-color: WhiteSmoke;">
         <input type="text" placeholder="Modelo do Carro" ng-model="data.carro" ng-required="false">
       </label>
-      <label class="item item-input" style="background-color: WhiteSmoke;">
+        <label class="item item-input" style="background-color: WhiteSmoke;">
         <input type="text" placeholder="Cor do Carro" ng-model="data.corcarro" ng-required="false">
       </label>
 
-      <label class="item">
+        <label class="item">
         <button name="cadastrar" class="button button-block button-positive" type="submit" ng-disabled="alterar.$invalid">Salvar</button>
       </label>
-    </div>
-  </form>
+      </div>
+    </form>
   </ion-content>
 </ion-view>
