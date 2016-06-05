@@ -431,7 +431,7 @@ angular.module('starter.controllers', ['firebase'])
             clearInterval(cronometroInterval);
 
             //reseta as variaveis
-            cronometroSegundos = 10;
+            cronometroSegundos = 30;
             cronometroMinutos = 0;
             $scope.cronometroTela = cronometroMinutos + '0:' + cronometroSegundos;
             $scope.mostraCronometro = false;
@@ -696,6 +696,7 @@ angular.module('starter.controllers', ['firebase'])
                 var nomeMotorista = '';
                 var telefoneMotorista = '';
                 var numRecomendacao = 0;
+                var numCarona = 0;
                 var matriculaMotorista = '';
 
                 // a cada 10 segundos, uma nova requisição é gerada
@@ -746,7 +747,7 @@ angular.module('starter.controllers', ['firebase'])
                                     // requisição que obtem as recomendações do motorista
                                     $http({
                                         method: 'GET',
-                                        url: 'https://amber-torch-3328.firebaseio.com/caronas/.json'
+                                        url: 'https://amber-torch-3328.firebaseio.com/caronas.json?orderBy="status"&equalTo="aceita"'
 
                                         // caso a requisição de recomendações seja bem sucedida...
                                     }).then(function successCallback(response) {
@@ -757,11 +758,16 @@ angular.module('starter.controllers', ['firebase'])
                                             if ((aux.numRecomendacao > 0) && (aux.motorista.matricula == matriculaMotorista)) {
                                                 numRecomendacao += aux.numRecomendacao;
                                             }
+                                            
+                                            if (aux.motorista.matricula == matriculaMotorista){
+                                                numCarona++;
+                                            } 
                                         }
                                         // pergunta se o solicitante deseja aceitar a carona oferecida
                                         var confirmPopup = $ionicPopup.confirm({
                                             title: 'Carona Oferecida',
-                                            template: '<p>Deseja pegar carona com ' + nomeMotorista + '  <i class="icon ion-thumbsup"> ' + numRecomendacao + '</i> ?</p>'
+                                            template: ('<p>Deseja pegar carona com ' + nomeMotorista + ' com  <i class="icon ion-thumbsup"> ' + numRecomendacao + 
+                                                       '</i>  de  <i class="icon ion-model-s"> ' + numCarona + '</i> ?</p>')
                                         });
 
                                         // resposta do solicitante
@@ -843,7 +849,7 @@ angular.module('starter.controllers', ['firebase'])
                             // comportamento padrão quando as requisições são feitas mas não há oferta de carona
                             default:
 
-                                // se o contador de requisições for maior que o limite máximo ou quando o cronometro zerar...
+                                // quando o cronometro zerar...
                                 if ((cronometroMinutos <= 0) && (cronometroSegundos <= 0)) {
                                     //reseta o cronometro
                                     limpaCronometro();
