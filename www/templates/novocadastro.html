@@ -45,7 +45,7 @@
       <center><span class="error" ng-show="novo.email.$invalid || novo.email.$pristine">É necessário informar um email</span></center>
       <br>
       <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input name="telefone" type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11" ng-maxlength="11">
+        <input name="telefone" type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11" ng-maxlength="14" ui-mask="(99)99999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
       </label>
       <center><span class="error" ng-show="novo.telefone.$invalid || novo.telefone.$pristine">Telefone no mínimo com 11 caracteres</span></center>
       

@@ -40,7 +40,7 @@
         <br>
         
         <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input name="telefone" type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11" ng-maxlength="11">
+        <input name="telefone" type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11" ng-maxlength="14" ui-mask="(99)99999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
       </label>
       <center><span class="error" ng-show="alterar.telefone.$invalid">O telefone deve ter no mínimo 11 digítos</span></center>
 

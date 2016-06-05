@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers', 'firebase', 'ion-autocomplete'])
+angular.module('starter', ['ionic', 'starter.controllers', 'firebase', 'ion-autocomplete', 'ui.mask'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
