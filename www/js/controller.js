@@ -601,8 +601,8 @@ angular.module('starter.controllers', ['firebase'])
                 $scope.carona.erro = false;
 
                 // armazena o valor do campo origem/destino
-                $scope.carona.origem = $scope.clickedValueModel.item.nome;
-                $scope.carona.destino = $scope.clickedValueModel.item.nome;
+                $scope.carona.origem = $scope.carona.origem == '' ? $scope.clickedValueModel.item.nome : $scope.carona.origem;
+                $scope.carona.destino = typeof($scope.clickedValueModel.item) == 'undefined' ? $scope.carona.destino : $scope.clickedValueModel.item.nome;
 
                 // obtém a data atual e converte pro modelo dia/mes
                 var ISOStringDate = new Date().toISOString();
@@ -619,7 +619,16 @@ angular.module('starter.controllers', ['firebase'])
                 hourString = hourBrazil + hourString.substr(2, 3);
 
                 // armazena o bairro e a cidade selecionados
-                var addressString = $scope.clickedValueModel.item.nome;
+                var addressString = '';
+                switch ($scope.carona.opcao) {
+                    case 'O':
+                        addressString = $scope.carona.origem;
+                    break;
+                    case 'D':
+                        addressString = $scope.carona.destino;
+                    break;
+                }
+                
                 var addressArray = addressString.split(' - ');
                 var bairro = addressArray[0];
                 var cidade = addressArray[1];
