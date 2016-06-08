@@ -602,7 +602,7 @@ angular.module('starter.controllers', ['firebase'])
 
                 // armazena o valor do campo origem/destino
                 $scope.carona.origem = $scope.carona.origem == '' ? $scope.clickedValueModel.item.nome : $scope.carona.origem;
-                $scope.carona.destino = typeof($scope.clickedValueModel.item) == 'undefined' ? $scope.carona.destino : $scope.clickedValueModel.item.nome;
+                $scope.carona.destino = typeof ($scope.clickedValueModel.item) == 'undefined' ? $scope.carona.destino : $scope.clickedValueModel.item.nome;
 
                 // obtém a data atual e converte pro modelo dia/mes
                 var ISOStringDate = new Date().toISOString();
@@ -623,12 +623,12 @@ angular.module('starter.controllers', ['firebase'])
                 switch ($scope.carona.opcao) {
                     case 'O':
                         addressString = $scope.carona.origem;
-                    break;
+                        break;
                     case 'D':
                         addressString = $scope.carona.destino;
-                    break;
+                        break;
                 }
-                
+
                 var addressArray = addressString.split(' - ');
                 var bairro = addressArray[0];
                 var cidade = addressArray[1];
@@ -767,16 +767,16 @@ angular.module('starter.controllers', ['firebase'])
                                             if ((aux.numRecomendacao > 0) && (aux.motorista.matricula == matriculaMotorista)) {
                                                 numRecomendacao += aux.numRecomendacao;
                                             }
-                                            
-                                            if (aux.motorista.matricula == matriculaMotorista){
+
+                                            if (aux.motorista.matricula == matriculaMotorista) {
                                                 numCarona++;
-                                            } 
+                                            }
                                         }
                                         // pergunta se o solicitante deseja aceitar a carona oferecida
                                         var confirmPopup = $ionicPopup.confirm({
                                             title: 'Carona Oferecida',
-                                            template: ('<p>Deseja pegar carona com ' + nomeMotorista + ' com  <i class="icon ion-thumbsup"> ' + numRecomendacao + 
-                                                       '</i>  de  <i class="icon ion-model-s"> ' + numCarona + '</i> ?</p>')
+                                            template: ('<p>Deseja pegar carona com ' + nomeMotorista + ' com  <i class="icon ion-thumbsup"> ' + numRecomendacao +
+                                                '</i>  de  <i class="icon ion-model-s"> ' + numCarona + '</i> ?</p>')
                                         });
 
                                         // resposta do solicitante
@@ -818,7 +818,8 @@ angular.module('starter.controllers', ['firebase'])
                                                     url: 'https://amber-torch-3328.firebaseio.com/caronas/' + $scope.carona.id + '.json',
                                                     data: {
                                                         'status': 'recusada',
-                                                        'motorista': false                                                    }
+                                                        'motorista': false
+                                                    }
                                                 });
                                             }
                                         });
@@ -826,7 +827,7 @@ angular.module('starter.controllers', ['firebase'])
                                         function errorCallback(response) {
                                             //zera as recomendações pois deu erro
                                             numRecomendacao = 0;
-                                            
+
                                             clearInterval(caronaInterval);
 
                                             var alertPopup = $ionicPopup.alert({
@@ -1483,12 +1484,12 @@ angular.module('starter.controllers', ['firebase'])
         // url do banco de dados
         var FIREBASE_URL = "https://amber-torch-3328.firebaseio.com/";
 
-        // recupera a matricula da autenticação do usuário
-        var matricula = AuthService.matricula();
-
         // função inicial do controller
         $scope.ini = function () {
             $scope.historico = [];
+            
+            // recupera a matricula da autenticação do usuário
+            $scope.matriculaUsuarioLogado = AuthService.matricula();
 
             // url para buscar o historico de carona
             var urlGet = FIREBASE_URL + 'caronas.json?orderBy="status"&equalTo="aceita"';
@@ -1499,7 +1500,7 @@ angular.module('starter.controllers', ['firebase'])
                 for (var key in resp.data) {
                     var aux = resp.data[key];
 
-                    if ((aux.motorista.matricula == matricula) || (aux.solicitante.matricula == matricula)) {
+                    if ((aux.motorista.matricula == $scope.matriculaUsuarioLogado) || (aux.solicitante.matricula == $scope.matriculaUsuarioLogado)) {
                         aux.mostrarDetalhe = false;
                         aux.id = key;
                         $scope.historico.push(aux);
