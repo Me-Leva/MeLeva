@@ -40,9 +40,11 @@
       <center><span class="error" ng-show="novo.senha.$invalid && !novo.senha.$pristine">Senha no mínimo de 8 caracteres</span></center>
 
       <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input name="email" type="text" placeholder="Email" ng-model="data.email" ng-required="true">
+        <input name="email" type="email" placeholder="Email" ng-model="data.email" ng-required="true">
       </label>
-      <center><span class="error" ng-show="novo.email.$invalid && !novo.email.$pristine">É necessário informar um email</span></center>
+      <center>
+          <span class="error" ng-show="novo.email.$invalid && !novo.email.$pristine">É necessário informar um email válido</span>     
+      </center>
       <br>
       <label class="item item-input" style="background-color: WhiteSmoke;">
         <input name="telefone" type="text" placeholder="Telefone" ng-model="data.telefone" ng-required="true" ng-minlength="11" ng-maxlength="14" ui-mask="(99)99999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
@@ -62,11 +64,8 @@
       <label class="item item-input" style="background-color: WhiteSmoke;">
         <input name="endereco" type="text" placeholder="Endereço" ng-model="data.endereco" ng-required="true">
       </label>
-      <center><span class="error" ng-show="novo.endereco.$invalid && !novo.endereco.$pristine">É necessário informar um endereço</span></center>
-      
-      <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Ponto de Referencia" ng-model="data.pontoreferencia" ng-required="false">
-      </label>
+      <center><span class="error" ng-show="novo.endereco.$invalid && !novo.endereco.$pristine">É necessário informar um endereço</span></center>     
+          
       <br>
       <label class="item item-input" style="background-color: WhiteSmoke;">
         <input type="text" placeholder="Modelo do Carro" ng-model="data.carro" ng-required="false">

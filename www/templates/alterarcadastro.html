@@ -34,9 +34,9 @@
         <center><span class="error" ng-show="alterar.senha.$invalid">A senha deve ter no mínimo 8 caracteres</span></center>
 
         <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input name="email" type="text" placeholder="Email" ng-model="data.email" ng-required="true">
+        <input name="email" type="email" placeholder="Email" ng-model="data.email" ng-required="true">
       </label>
-      <center><span class="error" ng-show="alterar.email.$invalid">É necessário informar um email</span></center>
+      <center><span class="error" ng-show="alterar.email.$invalid">É necessário informar um email válido</span></center>
         <br>
         
         <label class="item item-input" style="background-color: WhiteSmoke;">
@@ -58,10 +58,7 @@
         <input name="endereco" type="text" placeholder="Endereço" ng-model="data.endereco" ng-required="true">
       </label>
       <center><span class="error" ng-show="alterar.endereco.$invalid">É necessário informar um endereço</span></center>
-      
-        <label class="item item-input" style="background-color: WhiteSmoke;">
-        <input type="text" placeholder="Ponto de Referencia" ng-model="data.pontoreferencia" ng-required="false">
-      </label>
+           
         <br>
         <label class="item item-input" style="background-color: WhiteSmoke;">
         <input type="text" placeholder="Modelo do Carro" ng-model="data.carro" ng-required="false">

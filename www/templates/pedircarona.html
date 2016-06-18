@@ -23,13 +23,13 @@
         <span class="error" ng-show="carona.erro">{{carona.erroMsg}}</span>
       </center>
     </div>
-    
+
     <button id="geolocation" class="button button-positive" ng-disabled="carona.mostrarDestino" ng-click="localizacao()">
       <i class="icon ion-location"></i>
-    </button>    
-    
+    </button>
+
     <div id="autocompleteBairro" class="list">
-      
+
       <label class="item item-input">
 		  
 		  <input ion-autocomplete type="text" readonly="readonly" class="ion-autocomplete" autocomplete="off"
@@ -61,9 +61,15 @@
 				 		ng-show="carona.mostrarOrigem" ng-model="carona.origem" ng-required="true"/>
                          
       </label>
-      
+
     </div>
 
+    <div>
+      <label class="item item-input">
+        <input name="complemento" type="text" placeholder="Complemento" ng-model="carona.complemento">
+      </label>
+    </div>
+<br>
     <div>
       <span>Quantidade de Pessoas:</span>
 
@@ -88,7 +94,7 @@
       </div>
     </div> <br><br><br>
     <div id="cronometroStyle" ng-show="mostraCronometro">
-    <center>  {{cronometroTela}} </center>
+      <center> {{cronometroTela}} </center>
     </div>
   </ion-content>
 </ion-view>

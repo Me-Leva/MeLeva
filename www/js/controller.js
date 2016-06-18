@@ -420,6 +420,7 @@ angular.module('starter.controllers', ['firebase'])
             $scope.carona.origem = '';
             $scope.carona.destino = '';
             $scope.carona.botaoPedirCarona = true;
+            $scope.carona.complemento = '';
 
             //limpa o cronometro da tela
             limpaCronometro();
@@ -685,6 +686,7 @@ angular.module('starter.controllers', ['firebase'])
                     'status': 'pendente',
                     'vagas': $scope.carona.numPessoas,
                     'numRecomendacao': 0,
+                    'complemento' : $scope.carona.complemento,
                     'motorista': false,
                     'solicitante': {
                         'matricula': usuarioLogado.matricula,
@@ -1288,8 +1290,7 @@ angular.module('starter.controllers', ['firebase'])
             telefone: '',
             cidade: '',
             bairro: '',
-            endereco: '',
-            pontoreferencia: '',
+            endereco: '',           
             carro: '',
             corcarro: ''
         };
@@ -1366,8 +1367,7 @@ angular.module('starter.controllers', ['firebase'])
                 telefone: $scope.data.telefone,
                 cidade: $scope.data.cidade,
                 bairro: $scope.data.bairro,
-                endereco: $scope.data.endereco,
-                pontoreferencia: $scope.data.pontoreferencia,
+                endereco: $scope.data.endereco,              
                 carro: $scope.data.carro,
                 corcarro: $scope.data.corcarro
             });
@@ -1387,8 +1387,7 @@ angular.module('starter.controllers', ['firebase'])
             $scope.data.telefone = '';
             $scope.data.cidade = '';
             $scope.data.bairro = '';
-            $scope.data.endereco = '';
-            $scope.data.pontoreferencia = '';
+            $scope.data.endereco = '';          
             $scope.data.carro = '';
             $scope.data.corcarro = '';
 
@@ -1410,8 +1409,7 @@ angular.module('starter.controllers', ['firebase'])
                 $scope.data.telefone = resp.data.telefone;
                 $scope.data.cidade = resp.data.cidade;
                 $scope.data.bairro = resp.data.bairro;
-                $scope.data.endereco = resp.data.endereco;
-                $scope.data.pontoreferencia = resp.data.pontoreferencia;
+                $scope.data.endereco = resp.data.endereco;              
                 $scope.data.carro = resp.data.carro;
                 $scope.data.corcarro = resp.data.corcarro;
             }, function (err) {
@@ -1437,8 +1435,7 @@ angular.module('starter.controllers', ['firebase'])
                 telefone: $scope.data.telefone,
                 cidade: $scope.data.cidade,
                 bairro: $scope.data.bairro,
-                endereco: $scope.data.endereco,
-                pontoreferencia: $scope.data.pontoreferencia,
+                endereco: $scope.data.endereco,             
                 carro: $scope.data.carro,
                 corcarro: $scope.data.corcarro
             });
