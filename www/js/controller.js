@@ -709,6 +709,8 @@ angular.module('starter.controllers', ['firebase'])
                 var numRecomendacao = 0;
                 var numCarona = 0;
                 var matriculaMotorista = '';
+                var modeloCarro = '';
+                var corCarro = '';
 
                 // a cada 05 segundos, uma nova requisição é gerada
                 // objetivo: verificar se algum motorista ofereceu carona
@@ -755,6 +757,15 @@ angular.module('starter.controllers', ['firebase'])
                                     telefoneMotorista = response.data.telefone;
                                     matriculaMotorista = response.data.matricula;
 
+                                    if(response.data.carro == '' && response.data.corcarro == ''){
+                                        modeloCarro = 'não informado';
+                                        corCarro = '';
+                                    }else{
+                                        modeloCarro = response.data.carro;
+                                        corCarro = response.data.corcarro;
+                                    }
+                                    
+
                                     // requisição que obtem as recomendações do motorista
                                     $http({
                                         method: 'GET',
@@ -778,7 +789,7 @@ angular.module('starter.controllers', ['firebase'])
                                         var confirmPopup = $ionicPopup.confirm({
                                             title: 'Carona Oferecida',
                                             template: ('<p>Deseja pegar carona com ' + nomeMotorista + ' com  <i class="icon ion-thumbsup"> ' + numRecomendacao +
-                                                '</i>  de  <i class="icon ion-model-s"> ' + numCarona + '</i> ?</p>')
+                                                '</i>  de  <i class="icon ion-model-s"> ' + numCarona + '</i> ?</p><p> Carro: ' + modeloCarro + ' ' + corCarro + '</p>')
                                         });
 
                                         // resposta do solicitante
@@ -1113,7 +1124,10 @@ angular.module('starter.controllers', ['firebase'])
                             'motorista': {
                                 'matricula': usuarioLogado.matricula,
                                 'nome': usuarioLogado.nome,
-                                'telefone': usuarioLogado.telefone
+                                'telefone': usuarioLogado.telefone,
+                                'carro': usuarioLogado.carro,
+                                'corcarro': usuarioLogado.corcarro
+
                             }
                         }
 
