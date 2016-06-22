@@ -66,8 +66,9 @@
 
     <div>
       <label class="item item-input">
-        <input name="complemento" type="text" placeholder="Complemento" ng-model="carona.complemento">
+        <input name="complemento" type="text" placeholder="Complemento" ng-model="carona.complemento" ng-readonly="carona.geolocalizacao">
       </label>
+      <center><span class="error" ng-show="carona.geolocalizacao">Complemento já informado</span></center>
     </div>
 <br>
     <div>

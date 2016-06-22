@@ -421,6 +421,7 @@ angular.module('starter.controllers', ['firebase'])
             $scope.carona.destino = '';
             $scope.carona.botaoPedirCarona = true;
             $scope.carona.complemento = '';
+            $scope.carona.geolocalizacao = false;
 
             //limpa o cronometro da tela
             limpaCronometro();
@@ -488,6 +489,10 @@ angular.module('starter.controllers', ['firebase'])
                     bairroString = localString[0]
                     localString = localString[1].split(' - ')
                     cidadeString = localString[0]
+
+                    //coloca o nome da rua como complemento
+                    $scope.carona.complemento = response.data.results[0].address_components[1].short_name;
+                    $scope.carona.geolocalizacao = true;
 
                     // exibe o bairro e a cidade no campo apropriado
                     $scope.carona.origem = bairroString + ' - ' + cidadeString
@@ -686,7 +691,7 @@ angular.module('starter.controllers', ['firebase'])
                     'status': 'pendente',
                     'vagas': $scope.carona.numPessoas,
                     'numRecomendacao': 0,
-                    'complemento' : $scope.carona.complemento,
+                    'complemento': $scope.carona.complemento,
                     'motorista': false,
                     'solicitante': {
                         'matricula': usuarioLogado.matricula,
@@ -757,14 +762,14 @@ angular.module('starter.controllers', ['firebase'])
                                     telefoneMotorista = response.data.telefone;
                                     matriculaMotorista = response.data.matricula;
 
-                                    if(response.data.carro == '' && response.data.corcarro == ''){
+                                    if (response.data.carro == '' && response.data.corcarro == '') {
                                         modeloCarro = 'não informado';
                                         corCarro = '';
-                                    }else{
+                                    } else {
                                         modeloCarro = response.data.carro;
                                         corCarro = response.data.corcarro;
                                     }
-                                    
+
 
                                     // requisição que obtem as recomendações do motorista
                                     $http({
@@ -970,12 +975,28 @@ angular.module('starter.controllers', ['firebase'])
                 });
             });
 
+
+
             // lista os dados no autocomplete
             $scope.getBairros = function (query) {
                 if (query) {
+                    //reserta o complemento, destino e a origem se clicar no autocomplete
+                    if ($scope.carona.geolocalizacao) {
+                        $scope.carona.complemento = "";
+                        $scope.carona.geolocalizacao = false;
+                        $scope.carona.origem = "";
+                        $scope.carona.destino = "";
+                    }
                     return {
                         items: $scope.bairros
                     };
+                }
+                //reserta o complemento, destino e a origem se clicar no autocomplete
+                if ($scope.carona.geolocalizacao) {
+                    $scope.carona.complemento = "";
+                    $scope.carona.geolocalizacao = false;
+                    $scope.carona.origem = "";
+                    $scope.carona.destino = "";
                 }
                 return { items: [] };
             };
@@ -1106,7 +1127,8 @@ angular.module('starter.controllers', ['firebase'])
             // exibe as informações do pedido de carona
             var confirmPopup = $ionicPopup.confirm({
                 title: 'Oferecer Carona',
-                template: '<p><i class="icon ion-man"></i> ' + pedido.vagas + ' &nbsp&nbsp ' + pedido.solicitante.nome + '</p></br><p>' + pedido.origem.bairro + ' <i class="icon ion-arrow-right-c"></i> ' + pedido.destino.bairro + '</p>'
+                template: '<p><i class="icon ion-man"></i> ' + pedido.vagas + ' &nbsp&nbsp ' + pedido.solicitante.nome + '</p>' + pedido.origem.bairro + ' <i class="icon ion-arrow-right-c"></i> ' + pedido.destino.bairro + '</p>' +
+                          '<p>'+ pedido.complemento  
             });
 
             // resposta do motorista
@@ -1304,7 +1326,7 @@ angular.module('starter.controllers', ['firebase'])
             telefone: '',
             cidade: '',
             bairro: '',
-            endereco: '',           
+            endereco: '',
             carro: '',
             corcarro: ''
         };
@@ -1381,7 +1403,7 @@ angular.module('starter.controllers', ['firebase'])
                 telefone: $scope.data.telefone,
                 cidade: $scope.data.cidade,
                 bairro: $scope.data.bairro,
-                endereco: $scope.data.endereco,              
+                endereco: $scope.data.endereco,
                 carro: $scope.data.carro,
                 corcarro: $scope.data.corcarro
             });
@@ -1401,7 +1423,7 @@ angular.module('starter.controllers', ['firebase'])
             $scope.data.telefone = '';
             $scope.data.cidade = '';
             $scope.data.bairro = '';
-            $scope.data.endereco = '';          
+            $scope.data.endereco = '';
             $scope.data.carro = '';
             $scope.data.corcarro = '';
 
@@ -1423,7 +1445,7 @@ angular.module('starter.controllers', ['firebase'])
                 $scope.data.telefone = resp.data.telefone;
                 $scope.data.cidade = resp.data.cidade;
                 $scope.data.bairro = resp.data.bairro;
-                $scope.data.endereco = resp.data.endereco;              
+                $scope.data.endereco = resp.data.endereco;
                 $scope.data.carro = resp.data.carro;
                 $scope.data.corcarro = resp.data.corcarro;
             }, function (err) {
@@ -1449,7 +1471,7 @@ angular.module('starter.controllers', ['firebase'])
                 telefone: $scope.data.telefone,
                 cidade: $scope.data.cidade,
                 bairro: $scope.data.bairro,
-                endereco: $scope.data.endereco,             
+                endereco: $scope.data.endereco,
                 carro: $scope.data.carro,
                 corcarro: $scope.data.corcarro
             });
@@ -1498,7 +1520,7 @@ angular.module('starter.controllers', ['firebase'])
         // função inicial do controller
         $scope.ini = function () {
             $scope.historico = [];
-            
+
             // recupera a matricula da autenticação do usuário
             $scope.matriculaUsuarioLogado = AuthService.matricula();
 
